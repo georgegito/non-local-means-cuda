@@ -5,7 +5,6 @@
 int main()
 {   
     std::cout << std::endl;
-    // test();
 
     // std::vector<double> image {
     //     0.541176470588235, 0.466666666666667, 0.439215686274510, 0.450980392156863, 0.458823529411765, 0.435294117647059, 0.458823529411765,
@@ -27,10 +26,9 @@ int main()
 
     int n = image.size();
     int patchSize = 3;
+    double sigma = 1.2;
 
-    double dist = filter(image, n, patchSize, 0, 0, 4, 4);
-
-    std::cout << dist << std::endl;
+    std::cout << filterPixel(image, n, patchSize, 3, 1, sigma) << std::endl;
 
     std::cout << std::endl;
     return 0;

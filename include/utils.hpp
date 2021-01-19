@@ -14,7 +14,7 @@ bool isInBounds(int n, int x, int y)
 
 double computeEuclideanDistance(std::vector<std::vector<int>> image, int n, int patchSize, int p1_row, int p1_col, int p2_row, int p2_col) 
 {
-    int p1_rowStart = p1_row - patchSize / 2;
+    int p1_rowStart = p1_row - patchSize / 2;   // TODO avoid multiple computations for p1
     int p1_colStart = p1_col - patchSize / 2;
     int p2_rowStart = p2_row - patchSize / 2;
     int p2_colStart = p2_col - patchSize / 2;
@@ -29,6 +29,11 @@ double computeEuclideanDistance(std::vector<std::vector<int>> image, int n, int 
     }
 
     return sqrt(ans);
+}
+
+double computeWeight(double dist, double sigma, double z) 
+{
+    return (1 / z) * exp(dist / pow(sigma, 2));
 }
 
 } // namespace util
