@@ -37,6 +37,7 @@ double computeEuclideanDistance(std::vector<std::vector<int>> image, std::vector
     int p2_colStart = p2_col - patchSize / 2;
     double ans = 0;
 
+    //TODO add break
     for (int i = 0; i < patchSize; i++) {
         for (int j = 0; j < patchSize; j++) {
             if (isInBounds(n, p1_rowStart + i, p1_colStart + j) && isInBounds(n, p2_rowStart + i, p2_colStart + j)){
