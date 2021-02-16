@@ -28,7 +28,8 @@ int main()
 
     int n = image.size();
     int patchSize = 3;
-    double sigma = 1.2;
+    double filterSigma = 0.02;
+    double patchSigma = 1.2;
 
 /* ------------------------- euclidean distance test ------------------------ */
 
@@ -42,19 +43,28 @@ int main()
 
 /* ----------------------------- filtering test ----------------------------- */
 
-    int row = 0;
-    int col = 0;
-    std::cout << "* filtering pixel (" << row << ", " << col << ") *\n\n";
-    double res = filterPixel(image, n, patchSize, row, col, sigma);
-    std::cout << "initial pixel value = " << image[row][col] << " -> " << "filtered pixel value = " << res << std::endl;
-    std::cout << std::endl;
+    // int row = 0;
+    // int col = 0;
+    // std::cout << "* filtering pixel (" << row << ", " << col << ") *\n\n";
+    // double res = filterPixel(image, n, patchSize, row, col, filterSigma);
+    // std::cout << "initial pixel value = " << image[row][col] << " -> " << "filtered pixel value = " << res << std::endl;
+    // std::cout << std::endl;
+
+/* --------------------------- inside weights test -------------------------- */
+
+    std::vector<double> _weights = util::computeInsideWeights(3, patchSigma);
+    prt::rowMajorVector(_weights, 3, 3);
+
+    double _sum = 0;
+    for (auto v:_weights) {
+        _sum += v;
+    }
+    std::cout << "_sumW = " << _sum << std::endl;
 
 /* --------------------------------- random --------------------------------- */
 
-    // std::vector<std::vector<double>> D(5, std::vector<double>(5));
-    // std::vector<std::vector<double>> D(5, std::vector<double>(5));
-    // std::cout << D[1][1];
-    // std::cout << std::endl;
+    // std::vector<double> vector{0, 1, 2, 3, 4, 5, 6, 7, 8};
+    // prt::rowMajorVector(vector, 3, 3);
 
 /* -------------------------------------------------------------------------- */
 

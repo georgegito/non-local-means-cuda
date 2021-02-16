@@ -53,6 +53,47 @@ double computeWeight(double dist, double sigma) // compute weight without "/z(i)
     return exp(-dist / pow(sigma, 2));
 }
 
+std::vector<double> computeInsideWeights(int patchSize, double patchSigma)
+{
+    std::vector<double> _weights(patchSize * patchSize);
+    int centralPixelRow = patchSize / 2;
+    int centralPixelCol = centralPixelRow;
+    double _dist;
+    double _sumW = 0;
+
+    for (int i = 0; i < patchSize; i++) {
+        for (int j = 0; j < patchSize; j++) {
+            _dist = sqrt(pow(centralPixelRow - i, 2) + pow(centralPixelCol - j, 2));
+            _weights[i * patchSize + j] = computeWeight(_dist, patchSigma);
+            _sumW += _weights[i * patchSize + j];
+        }
+    }
+
+    for (int i = 0; i < patchSize; i++) {
+        for (int j = 0; j < patchSize;j++) {
+            _weights[i * patchSize + j] = _weights[i * patchSize + j] / _sumW;
+        }
+    }
+
+    return _weights;
+}
+
+
 } // namespace util
+
+namespace prt {
+
+void rowMajorVector(std::vector<double> vector, int n, int m)
+{
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            std::cout << vector[i * m + j] << "\t";
+        }
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
+}
+
+}
 
 #endif // __UTILS_H__
