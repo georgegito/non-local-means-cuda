@@ -31,14 +31,14 @@ bool isInBounds(int n, int x, int y)
 
 double computeEuclideanDistance(std::vector<std::vector<int>> image, std::vector<double> _weights, int n, int patchSize, int p1_row, int p1_col, int p2_row, int p2_col) 
 {
-    int p1_rowStart = p1_row - patchSize / 2;   // TODO avoid multiple computations for p1
+    int p1_rowStart = p1_row - patchSize / 2;
     int p1_colStart = p1_col - patchSize / 2;
     int p2_rowStart = p2_row - patchSize / 2;
     int p2_colStart = p2_col - patchSize / 2;
     double ans = 0;
 
-    //TODO add break
     for (int i = 0; i < patchSize; i++) {
+        // TODO check for improvement
         for (int j = 0; j < patchSize; j++) {
             if (isInBounds(n, p1_rowStart + i, p1_colStart + j) && isInBounds(n, p2_rowStart + i, p2_colStart + j)){
                 ans += _weights[i * patchSize + j] * pow((image[p1_rowStart + i][p1_colStart + j] - image[p2_rowStart + i][p2_colStart + j]), 2);
@@ -95,6 +95,6 @@ void rowMajorVector(std::vector<double> vector, int n, int m)
     std::cout << std::endl;
 }
 
-}
+} // namespace prt
 
 #endif // __UTILS_H__

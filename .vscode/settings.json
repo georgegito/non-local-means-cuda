@@ -41,5 +41,6 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "typeinfo": "cpp"
-    }
+    },
+    "kite.codefinder.enableLineDecoration": false
 }
