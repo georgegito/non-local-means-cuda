@@ -23,7 +23,7 @@ double filterPixel(std::vector<std::vector<int>> image, int n, int patchSize, in
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n;j++) {
-            res += (weights[i * n + j] / sumW) * image[pixelRow][pixelCol];
+            res += (weights[i * n + j] / sumW) * image[i][j];
         }
     }
 

@@ -42,8 +42,8 @@ int main()
 
 /* ----------------------------- filtering test ----------------------------- */
 
-    int row = 4;
-    int col = 2;
+    int row = 0;
+    int col = 0;
     std::cout << "* filtering pixel (" << row << ", " << col << ") *\n\n";
     double res = filterPixel(image, n, patchSize, row, col, sigma);
     std::cout << "initial pixel value = " << image[row][col] << " -> " << "filtered pixel value = " << res << std::endl;
