@@ -30,17 +30,31 @@ int main()
     int patchSize = 3;
     double sigma = 1.2;
 
-    // std::cout << filterPixel(image, n, patchSize, 3, 1, sigma) << std::endl;
-
 /* ------------------------- euclidean distance test ------------------------ */
 
-    std::cout << "dist = " << util::computeEuclideanDistance(image,n, patchSize, 0, 0, 4, 0);
-    std::cout << std::endl;
+    // std::cout << "dist = " << util::computeEuclideanDistance(image,n, patchSize, 0, 0, 4, 0);
+    // std::cout << std::endl;
 
 /* ------------------------------- weight test ------------------------------ */
 
-    std::cout << "w = " << util::computeWeight(0, 1, 1);
+    // std::cout << "w = " << util::computeWeight(0, 1);
+    // std::cout << std::endl;
+
+/* ----------------------------- filtering test ----------------------------- */
+
+    int row = 4;
+    int col = 2;
+    std::cout << "* filtering pixel (" << row << ", " << col << ") *\n\n";
+    double res = filterPixel(image, n, patchSize, row, col, sigma);
+    std::cout << "initial pixel value = " << image[row][col] << " -> " << "filtered pixel value = " << res << std::endl;
     std::cout << std::endl;
+
+/* --------------------------------- random --------------------------------- */
+
+    // std::vector<std::vector<double>> D(5, std::vector<double>(5));
+    // std::vector<std::vector<double>> D(5, std::vector<double>(5));
+    // std::cout << D[1][1];
+    // std::cout << std::endl;
 
 /* -------------------------------------------------------------------------- */
 

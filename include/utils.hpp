@@ -7,6 +7,23 @@
 
 namespace util {
 
+// std::vector<std::vector<double>> computeDistanceMatrix(std::vector<std::vector<int>> image, int n)
+// {
+//     std::vector<std::vector<double>> D(n, std::vector<double>(n));
+
+//     for (int i = 0; i < n; i++) {
+//         for (int j = 0; j < n; j++) {
+//             for (int k = 0; k < n; k++) {
+//                 for (int l = 0; l < n; l++) {
+//                     D[i][j] = pow
+//                 }
+//             }
+//         }
+//     }
+
+//     return D;
+// }
+
 bool isInBounds(int n, int x, int y) 
 {
     return x >=0 && x < n && y >= 0 && y < n;
@@ -31,9 +48,9 @@ double computeEuclideanDistance(std::vector<std::vector<int>> image, int n, int 
     return sqrt(ans);
 }
 
-double computeWeight(double dist, double sigma, double z) 
+double computeWeight(double dist, double sigma) // compute weight without "/z(i)" division
 {
-    return (1 / z) * exp(dist / pow(sigma, 2));
+    return exp(-dist / pow(sigma, 2));
 }
 
 } // namespace util
