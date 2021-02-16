@@ -28,7 +28,7 @@ int main()
 
     int n = image.size();
     int patchSize = 3;
-    double filterSigma = 0.02;
+    double filterSigma = 1;
     double patchSigma = 1.2;
 
 /* ------------------------- euclidean distance test ------------------------ */
@@ -52,14 +52,40 @@ int main()
 
 /* --------------------------- inside weights test -------------------------- */
 
-    std::vector<double> _weights = util::computeInsideWeights(3, patchSigma);
-    prt::rowMajorVector(_weights, 3, 3);
+    // std::vector<double> _weights = util::computeInsideWeights(3, patchSigma);
+    // prt::rowMajorVector(_weights, 3, 3);
 
-    double _sum = 0;
-    for (auto v:_weights) {
-        _sum += v;
+    // double _sum = 0;
+    // for (auto v:_weights) {
+    //     _sum += v;
+    // }
+    // std::cout << "_sumW = " << _sum << std::endl;
+
+/* --------------- filtering with inside-gaussian-kernel test --------------- */
+
+    // std::vector<double> _weights = util::computeInsideWeights(patchSize, patchSigma);
+
+    // int row = 1;
+    // int col = 1;
+
+    // std::cout << "* filtering pixel (" << row << ", " << col << ") *\n\n";
+    // double res = filterPixel(image, _weights, n, patchSize, row, col, filterSigma);
+    // std::cout << "initial pixel value = " << image[row][col] << " -> " << "filtered pixel value = " << res << std::endl;
+    // std::cout << std::endl;
+
+/* -------------------------- image filtering test -------------------------- */
+
+    std::vector<double> filteredImage(n * n);
+    std::vector<double> _weights = util::computeInsideWeights(patchSize, patchSigma);
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            filteredImage[i * n + j] = filterPixel(image, _weights, n, patchSize, i, j, filterSigma);
+        }
     }
-    std::cout << "_sumW = " << _sum << std::endl;
+
+    std::cout << "filtered image:\n\n";
+    prt::rowMajorVector(filteredImage, n, n);
 
 /* --------------------------------- random --------------------------------- */
 
