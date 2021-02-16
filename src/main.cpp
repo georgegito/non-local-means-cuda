@@ -6,6 +6,8 @@ int main()
 {   
     std::cout << std::endl;
 
+/* ---------------------------- data declaration ---------------------------- */
+
     // std::vector<double> image {
     //     0.541176470588235, 0.466666666666667, 0.439215686274510, 0.450980392156863, 0.458823529411765, 0.435294117647059, 0.458823529411765,
     //     0.600000000000000, 0.517647058823530, 0.486274509803922, 0.478431372549020, 0.494117647058824, 0.466666666666667, 0.458823529411765,
@@ -28,7 +30,19 @@ int main()
     int patchSize = 3;
     double sigma = 1.2;
 
-    std::cout << filterPixel(image, n, patchSize, 3, 1, sigma) << std::endl;
+    // std::cout << filterPixel(image, n, patchSize, 3, 1, sigma) << std::endl;
+
+/* ------------------------- euclidean distance test ------------------------ */
+
+    std::cout << "dist = " << util::computeEuclideanDistance(image,n, patchSize, 0, 0, 4, 0);
+    std::cout << std::endl;
+
+/* ------------------------------- weight test ------------------------------ */
+
+    std::cout << "w = " << util::computeWeight(0, 1, 1);
+    std::cout << std::endl;
+
+/* -------------------------------------------------------------------------- */
 
     std::cout << std::endl;
     return 0;
