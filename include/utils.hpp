@@ -7,28 +7,35 @@
 
 namespace util {
 
-// std::vector<std::vector<double>> computeDistanceMatrix(std::vector<std::vector<int>> image, int n)
-// {
-//     std::vector<std::vector<double>> D(n, std::vector<double>(n));
+// compute all-to-all-pixel squared distance: (p1_val - p2_val)^2
+std::vector<std::vector<double>> computeDistanceMatrix(std::vector<std::vector<int>> image, int n)
+{
+    std::vector<std::vector<double>> D(n * n, std::vector<double>(n * n));
 
-//     for (int i = 0; i < n; i++) {
-//         for (int j = 0; j < n; j++) {
-//             for (int k = 0; k < n; k++) {
-//                 for (int l = 0; l < n; l++) {
-//                     D[i][j] = pow
-//                 }
-//             }
-//         }
-//     }
+    for (int i = 0; i < n * n; i++) {
+        for (int j = 0; j < n * n; j++) {
+            D[i][j] = pow (image[i / n][i % n] - image[j / n][j % n], 2);
+        }
+    }
 
-//     return D;
-// }
+    return D;
+}
+
+// pixel-to-pixel squared distance from distance matrix
+double indexDistanceMatrix(std::vector<std::vector<double>> D, int n, int p1_row, int p1_col, int p2_row, int p2_col)
+{
+    int x = n * p1_row + p1_col;
+    int y = n * p2_row + p2_col;
+
+    return D[x][y];
+}
 
 bool isInBounds(int n, int x, int y) 
 {
-    return x >=0 && x < n && y >= 0 && y < n;
+    return x >= 0 && x < n && y >= 0 && y < n;
 }
 
+// patch-to-patch euclidean distance
 double computeEuclideanDistance(std::vector<std::vector<int>> image, std::vector<double> _weights, int n, int patchSize, int p1_row, int p1_col, int p2_row, int p2_col) 
 {
     int p1_rowStart = p1_row - patchSize / 2;
@@ -89,6 +96,17 @@ void rowMajorVector(std::vector<double> vector, int n, int m)
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
             std::cout << vector[i * m + j] << "\t";
+        }
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
+}
+
+void twoDimVector(std::vector<std::vector<double>> vector, int n, int m) {
+
+    for (int i = 0; i < n * n; i++) {
+        for (int j = 0; j < n * n; j++) {
+            std::cout << vector[i][j] << "\t";
         }
         std::cout << std::endl;
     }

@@ -18,16 +18,24 @@ int main()
     //     0.568627450980392, 0.494117647058824, 0.486274509803922, 0.498039215686275, 0.486274509803922, 0.470588235294118, 0.458823529411765
     // };
 
+    // std::vector<std::vector<int>> image {
+    //     {1,     3,      4,      5,      1},
+    //     {3,     5,      2,      8,      5},
+    //     {4,     4,      2,      6,      1},
+    //     {0,     8,      7,      4,      1},
+    //     {0,     9,      0,      2,      3}
+    // };
+
     std::vector<std::vector<int>> image {
-        {1,     3,      4,      5,      1},
-        {3,     5,      2,      8,      5},
-        {4,     4,      2,      6,      1},
-        {0,     8,      7,      4,      1},
-        {0,     9,      0,      2,      3}
+        {1,     3,      4}, // (0,0) -> 0 * 3 + 0 = 0 col
+        {3,     5,      2}, // (1,2) -> 1 * 3 + 2 = 5 row
+        {4,     4,      2}
     };
 
+
     int n = image.size();
-    int patchSize = 3;
+    // int patchSize = 3;
+    int patchSize = 1;
     double filterSigma = 1;
     double patchSigma = 1.2;
 
@@ -75,23 +83,27 @@ int main()
 
 /* -------------------------- image filtering test -------------------------- */
 
-    std::vector<double> filteredImage(n * n);
-    std::vector<double> _weights = util::computeInsideWeights(patchSize, patchSigma);
+    // std::vector<double> filteredImage(n * n);
+    // std::vector<double> _weights = util::computeInsideWeights(patchSize, patchSigma);
 
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            filteredImage[i * n + j] = filterPixel(image, _weights, n, patchSize, i, j, filterSigma);
-        }
-    }
+    // for (int i = 0; i < n; i++) {
+    //     for (int j = 0; j < n; j++) {
+    //         filteredImage[i * n + j] = filterPixel(image, _weights, n, patchSize, i, j, filterSigma);
+    //     }
+    // }
 
-    std::cout << "filtered image:\n\n";
-    prt::rowMajorVector(filteredImage, n, n);
+    // std::cout << "filtered image:\n\n";
+    // prt::rowMajorVector(filteredImage, n, n);
 
 /* --------------------------------- random --------------------------------- */
 
     // std::vector<double> vector{0, 1, 2, 3, 4, 5, 6, 7, 8};
     // prt::rowMajorVector(vector, 3, 3);
 
+    std::vector<std::vector<double>> D = util::computeDistanceMatrix(image, n);
+    prt::twoDimVector(D, n, n);
+    std::cout << util::indexDistanceMatrix(D, n, 2, 0, 2, 2) << std::endl;
+    
 /* -------------------------------------------------------------------------- */
 
     std::cout << std::endl;
