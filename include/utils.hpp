@@ -14,7 +14,7 @@ std::vector<std::vector<double>> computeDistanceMatrix(std::vector<std::vector<i
 
     for (int i = 0; i < n * n; i++) {
         for (int j = 0; j < n * n; j++) {
-            D[i][j] = pow (image[i / n][i % n] - image[j / n][j % n], 2);
+            D[i][j] = pow(image[i / n][i % n] - image[j / n][j % n], 2);
         }
     }
 
@@ -22,12 +22,17 @@ std::vector<std::vector<double>> computeDistanceMatrix(std::vector<std::vector<i
 }
 
 // pixel-to-pixel squared distance from distance matrix
-double indexDistanceMatrix(std::vector<std::vector<double>> D, int n, int p1_row, int p1_col, int p2_row, int p2_col)
+double indexDistanceMatrix( std::vector<std::vector<double>> D, 
+                            int n, 
+                            int p1_row, 
+                            int p1_col, 
+                            int p2_row, 
+                            int p2_col )
 {
-    int x = n * p1_row + p1_col;
-    int y = n * p2_row + p2_col;
+    int _row = n * p1_row + p1_col;
+    int _col = n * p2_row + p2_col;
 
-    return D[x][y];
+    return D[_row][_col];
 }
 
 bool isInBounds(int n, int x, int y) 
@@ -36,7 +41,15 @@ bool isInBounds(int n, int x, int y)
 }
 
 // patch-to-patch euclidean distance
-double computeEuclideanDistance(std::vector<std::vector<int>> image, std::vector<double> _weights, int n, int patchSize, int p1_row, int p1_col, int p2_row, int p2_col) 
+double computeEuclideanDistance( std::vector<std::vector<int>> image, 
+                                 std::vector<std::vector<double>> _distances, 
+                                 std::vector<double> _weights, 
+                                 int n, 
+                                 int patchSize, 
+                                 int p1_row, 
+                                 int p1_col, 
+                                 int p2_row, 
+                                 int p2_col ) 
 {
     int p1_rowStart = p1_row - patchSize / 2;
     int p1_colStart = p1_col - patchSize / 2;
@@ -48,7 +61,8 @@ double computeEuclideanDistance(std::vector<std::vector<int>> image, std::vector
         // TODO check for improvement
         for (int j = 0; j < patchSize; j++) {
             if (isInBounds(n, p1_rowStart + i, p1_colStart + j) && isInBounds(n, p2_rowStart + i, p2_colStart + j)){
-                ans += _weights[i * patchSize + j] * pow((image[p1_rowStart + i][p1_colStart + j] - image[p2_rowStart + i][p2_colStart + j]), 2);
+                // ans += _weights[i * patchSize + j] * pow((image[p1_rowStart + i][p1_colStart + j] - image[p2_rowStart + i][p2_colStart + j]), 2);
+                ans += _weights[i * patchSize + j] * indexDistanceMatrix(_distances, n, p1_rowStart + i, p1_colStart + j, p2_rowStart + i, p2_colStart + j);
             }
         }
     }
