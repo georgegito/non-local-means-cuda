@@ -4,6 +4,9 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <fstream>
+#include <iterator>
+#include <string>
 
 namespace util {
 
@@ -128,5 +131,25 @@ void twoDimVector(std::vector<std::vector<double>> vector, int n, int m) {
 }
 
 } // namespace prt
+
+namespace file {
+    
+void write(std::vector<double> image, std::string fileName, int rowNum, int colNum)
+{
+    std::vector<std::string> out;
+
+    for (int i = 0; i < rowNum; i++) {
+        for (int j = 0; j < colNum; j++) {
+            out.push_back(std::to_string(image[i * colNum + j]) + " ");
+        }
+        out.push_back("\n");
+    }
+
+    std::ofstream output_file("./" + fileName + ".txt");
+    std::ostream_iterator<std::string> output_iterator(output_file, "");
+    std::copy(out.begin(), out.end(), output_iterator);
+}
+
+} // namespace file
 
 #endif // __UTILS_H__

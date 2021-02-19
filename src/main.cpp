@@ -37,6 +37,10 @@ int main()
     std::cout << "filtered image:\n\n";
     prt::rowMajorVector(filteredImage, n, n);
 
+/* ---------------------------- file writing test --------------------------- */
+
+    file::write(filteredImage, "filtered_image", n, n);
+
 /* -------------------------------------------------------------------------- */
 
     std::cout << std::endl;
