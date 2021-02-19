@@ -12,13 +12,14 @@
 namespace util {
 
 // compute all-to-all-pixel squared distance: (p1_val - p2_val)^2
-std::vector<std::vector<double>> computeDistanceMatrix(std::vector<std::vector<int>> image, int n)
+std::vector<std::vector<double>> computeDistanceMatrix(std::vector<double> image, int n)
 {
     std::vector<std::vector<double>> D(n * n, std::vector<double>(n * n));
 
     for (int i = 0; i < n * n; i++) {
         for (int j = 0; j < n * n; j++) {
-            D[i][j] = pow(image[i / n][i % n] - image[j / n][j % n], 2);
+            // D[i][j] = pow(image[i / n][i % n] - image[j / n][j % n], 2);
+            D[i][j] = pow(image[(i / n) * n + i % n] - image[(j / n) * n + j % n], 2);
         }
     }
 
@@ -45,15 +46,14 @@ bool isInBounds(int n, int x, int y)
 }
 
 // patch-to-patch euclidean distance
-double computePatchDistance( std::vector<std::vector<int>> image, 
-                                 std::vector<std::vector<double>> _distances, 
-                                 std::vector<double> _weights, 
-                                 int n, 
-                                 int patchSize, 
-                                 int p1_row, 
-                                 int p1_col, 
-                                 int p2_row, 
-                                 int p2_col ) 
+double computePatchDistance(    std::vector<std::vector<double>> _distances, 
+                                std::vector<double> _weights, 
+                                int n, 
+                                int patchSize, 
+                                int p1_row, 
+                                int p1_col, 
+                                int p2_row, 
+                                int p2_col     ) 
 {
     int p1_rowStart = p1_row - patchSize / 2;
     int p1_colStart = p1_col - patchSize / 2;
@@ -149,6 +149,26 @@ void write(std::vector<double> image, std::string fileName, int rowNum, int colN
     std::ofstream output_file("./" + fileName + ".txt");
     std::ostream_iterator<std::string> output_iterator(output_file, "");
     std::copy(out.begin(), out.end(), output_iterator);
+}
+
+std::vector<double> read(std::string filePath, int n, int m) 
+{
+    std::vector<double> image(n * m);
+    std::ifstream myfile(filePath);
+    std::ifstream input(filePath);
+    std::string s;
+
+    for (int i = 0; i < n; i++) {
+        std::getline(input, s);
+        std::istringstream iss(s);
+        std::string num;
+        int j = 0;
+        while (std::getline(iss, num, ',')) {
+            image[i * m + j++] = std::stof(num);
+        }
+    }
+
+    return image;
 }
 
 } // namespace file

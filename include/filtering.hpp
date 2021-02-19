@@ -3,7 +3,7 @@
 
 #include <utils.hpp>
 
-double filterPixel( std::vector<std::vector<int>> image, 
+double filterPixel( std::vector<double> image, 
                     std::vector<std::vector<double>> _distances, 
                     std::vector<double> _weights, 
                     int n, 
@@ -20,7 +20,7 @@ double filterPixel( std::vector<std::vector<int>> image,
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             // std::cout << "pixel (" << i << ", " << j << ")" << std::endl;
-            dist = util::computePatchDistance(image, _distances, _weights, n, patchSize, pixelRow, pixelCol, i, j);
+            dist = util::computePatchDistance(_distances, _weights, n, patchSize, pixelRow, pixelCol, i, j);
             // std::cout << "distance = " << dist << std::endl;
             weights[i * n + j] = util::computeWeight(dist, sigma);
             // std::cout << "weight = " << weights[i * n + j] << std::endl << std::endl;
@@ -30,14 +30,14 @@ double filterPixel( std::vector<std::vector<int>> image,
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n;j++) {
-            res += (weights[i * n + j] / sumW) * image[i][j];
+            res += (weights[i * n + j] / sumW) * image[i * n + j];
         }
     }
 
     return res;
 }
 
-std::vector<double> filterImage( std::vector<std::vector<int>> image, 
+std::vector<double> filterImage( std::vector<double> image, 
                                  int n, 
                                  int patchSize,  
                                  double patchSigma,
