@@ -20,7 +20,7 @@ double filterPixel( std::vector<std::vector<int>> image,
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             // std::cout << "pixel (" << i << ", " << j << ")" << std::endl;
-            dist = util::computeEuclideanDistance(image, _distances, _weights, n, patchSize, pixelRow, pixelCol, i, j);
+            dist = util::computePatchDistance(image, _distances, _weights, n, patchSize, pixelRow, pixelCol, i, j);
             // std::cout << "distance = " << dist << std::endl;
             weights[i * n + j] = util::computeWeight(dist, sigma);
             // std::cout << "weight = " << weights[i * n + j] << std::endl << std::endl;

@@ -4,9 +4,10 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-#include <fstream>
-#include <iterator>
 #include <string>
+#include <iterator>
+#include <fstream>
+#include <sstream>
 
 namespace util {
 
@@ -44,7 +45,7 @@ bool isInBounds(int n, int x, int y)
 }
 
 // patch-to-patch euclidean distance
-double computeEuclideanDistance( std::vector<std::vector<int>> image, 
+double computePatchDistance( std::vector<std::vector<int>> image, 
                                  std::vector<std::vector<double>> _distances, 
                                  std::vector<double> _weights, 
                                  int n, 
