@@ -9,35 +9,36 @@ int main()
 /* ------------------------- parameters declaration ------------------------- */
 
     // int n = image.size();
-    // int n = 5;
-    // int patchSize = 3;                      // patchSize -> always odd number
+    int n = 5;
+    int patchSize = 3;                      // patchSize -> always odd number
     // int patchSize = 1;
-    // double filterSigma = 1;
-    // double patchSigma = 1.2;
+    double filterSigma = 1;
+    double patchSigma = 1.2;
 
 /* ---------------------------- house parameters ---------------------------- */
 
-    int n = 64;
-    int patchSize = 5;
-    double filterSigma = 1;
-    double patchSigma = 1;
+    // int n = 64;
+    // int patchSize = 3;
+    // double filterSigma = 1;
+    // double patchSigma = 1;
 
 /* ---------------------------- file reading test --------------------------- */
 
-    std::vector<double> image(n * n);
-    image = file::read("./noised_house.txt", n, n);
+    // std::vector<double> image(n * n);
+    // image = file::read("./noised_house.txt", n, n);
+    // // image = file::read("./house.txt", n, n);
 
-    // prt::rowMajorVector(image, n, n);
+    // // prt::rowMajorVector(image, n, n);
 
 /* ---------------------------- data declaration ---------------------------- */
 
-    // std::vector<double> image {
-    //     1,     3,      4,      5,      1,
-    //     3,     5,      2,      8,      5,
-    //     4,     4,      2,      6,      1,
-    //     0,     8,      7,      4,      1,
-    //     0,     9,      0,      2,      3
-    // };                                      // image -> always squared
+    std::vector<double> image {
+        1,     3,      4,      5,      1,
+        3,     5,      2,      8,      5,
+        4,     4,      2,      6,      1,
+        0,     8,      7,      4,      1,
+        0,     9,      0,      2,      3
+    };                                      // image -> always squared
 
     // std::vector<std::vector<int>> image {
     //     {1,     3,      4},
@@ -50,7 +51,7 @@ int main()
     std::vector<double> filteredImage = filterImage(image, n, patchSize, patchSigma, filterSigma);
     
     std::cout << "filtered image:\n\n";
-    // prt::rowMajorVector(filteredImage, n, n);
+    prt::rowMajorVector(filteredImage, n, n);
 
 /* ---------------------------- file writing test --------------------------- */
 

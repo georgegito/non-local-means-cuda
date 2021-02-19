@@ -12,14 +12,14 @@
 namespace util {
 
 // compute all-to-all-pixel squared distance: (p1_val - p2_val)^2
-std::vector<std::vector<double>> computeDistanceMatrix(std::vector<double> image, int n)
+std::vector<double> computeDistanceMatrix(std::vector<double> image, int n)
 {
-    std::vector<std::vector<double>> D(n * n, std::vector<double>(n * n));
+    std::vector<double> D(pow(n, 4));
 
     for (int i = 0; i < n * n; i++) {
         for (int j = 0; j < n * n; j++) {
             // D[i][j] = pow(image[i / n][i % n] - image[j / n][j % n], 2);
-            D[i][j] = pow(image[(i / n) * n + i % n] - image[(j / n) * n + j % n], 2);
+            D[i * n * n + j] = pow(image[(i / n) * n + i % n] - image[(j / n) * n + j % n], 2);
         }
     }
 
@@ -27,7 +27,7 @@ std::vector<std::vector<double>> computeDistanceMatrix(std::vector<double> image
 }
 
 // pixel-to-pixel squared distance from distance matrix
-double indexDistanceMatrix( std::vector<std::vector<double>> D, 
+double indexDistanceMatrix( std::vector<double> D, 
                             int n, 
                             int p1_row, 
                             int p1_col, 
@@ -37,7 +37,7 @@ double indexDistanceMatrix( std::vector<std::vector<double>> D,
     int _row = n * p1_row + p1_col;
     int _col = n * p2_row + p2_col;
 
-    return D[_row][_col];
+    return D[_row * n * n + _col];
 }
 
 bool isInBounds(int n, int x, int y) 
@@ -46,14 +46,14 @@ bool isInBounds(int n, int x, int y)
 }
 
 // patch-to-patch euclidean distance
-double computePatchDistance(    std::vector<std::vector<double>> _distances, 
-                                std::vector<double> _weights, 
-                                int n, 
-                                int patchSize, 
-                                int p1_row, 
-                                int p1_col, 
-                                int p2_row, 
-                                int p2_col     ) 
+double computePatchDistance( std::vector<double> _distances, 
+                             std::vector<double> _weights, 
+                             int n, 
+                             int patchSize, 
+                             int p1_row, 
+                             int p1_col, 
+                             int p2_row, 
+                             int p2_col ) 
 {
     int p1_rowStart = p1_row - patchSize / 2;
     int p1_colStart = p1_col - patchSize / 2;
