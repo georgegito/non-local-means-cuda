@@ -1,45 +1,75 @@
 #include <iostream>
 #include <vector>
 #include <filtering.hpp>
+#include <cstdlib>
+#include <string> 
 
-int main()
+/* -------------------------------------------------------------------------- */
+/*                     non-local-means cpu implementation                     */
+/* -------------------------------------------------------------------------- */
+
+int main(int argc, char** argv)
 {   
     std::cout << std::endl;
 
-/* ---------------------------- data declaration ---------------------------- */
+/* ------------------------------- parameters ------------------------------- */
 
-    std::vector<std::vector<int>> image {
-        {1,     3,      4,      5,      1},
-        {3,     5,      2,      8,      5},
-        {4,     4,      2,      6,      1},
-        {0,     8,      7,      4,      1},
-        {0,     9,      0,      2,      3}
-    };                                      // image -> always squared
+    int n = 64;
+    int patchSize;
+    double filterSigma;
+    double patchSigma;
 
-    // std::vector<std::vector<int>> image {
-    //     {1,     3,      4},
-    //     {3,     5,      2},
-    //     {4,     4,      2}
-    // };
+    if (argc == 1) {
+        patchSize = 5;
+        filterSigma = 0.03;
+        patchSigma = 0.7;
+    }
+    else if(argc == 4) {
+        patchSize = atoi(argv[1]);
+        filterSigma = atof(argv[2]);
+        patchSigma = atof(argv[3]);
+    }
+    else {
+        return 1;
+    }
 
-/* ------------------------- parameters declaration ------------------------- */
+/* ------------------------------ file reading ------------------------------ */
 
-    int n = image.size();
-    int patchSize = 3;                      // patchSize -> always odd number
-    // int patchSize = 1;
-    double filterSigma = 1;
-    double patchSigma = 1.2;
+    std::vector<double> image(n * n);
+    image = file::read("./data/in/noisy_house.txt", n, n);
 
-/* -------------------------- image filtering test -------------------------- */
+    std::cout << "Read the image" << std::endl;
+
+/* ----------------------------- image filtering ---------------------------- */
 
     std::vector<double> filteredImage = filterImage(image, n, patchSize, patchSigma, filterSigma);
-    
-    std::cout << "filtered image:\n\n";
-    prt::rowMajorVector(filteredImage, n, n);
+
+    std::cout   << "Filtered the image with "   << std::endl
+                << "Patch size "                << patchSize    << std::endl
+                << "Patch sigma "               << patchSigma   << std::endl
+                << "Filter Sigma "              << filterSigma  << std::endl  << std::endl;
+
+    std::vector<double> residual(n *n);
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < n; j++){
+            residual[i * n + j] = image[i * n + j] - filteredImage[i * n + j];
+        }
+    }
+
+    std::cout << "Calculated the residual" << std::endl;
+
+/* ------------------------------ file writing ------------------------------ */
+
+    std::string params = std::to_string(patchSize)   + "_" + 
+                         std::to_string(filterSigma) + "_" + 
+                         std::to_string(patchSigma);
+
+    file::write_images(filteredImage, residual, params, n, n);
+
+    std::cout << "Wrote the filtered image and the residual" << std::endl;
 
 /* -------------------------------------------------------------------------- */
 
     std::cout << std::endl;
     return 0;
 }
-

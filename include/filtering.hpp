@@ -3,8 +3,8 @@
 
 #include <utils.hpp>
 
-double filterPixel( std::vector<std::vector<int>> image, 
-                    std::vector<std::vector<double>> _distances, 
+double filterPixel( std::vector<double> image, 
+                    std::vector<double> _distances, 
                     std::vector<double> _weights, 
                     int n, 
                     int patchSize, 
@@ -19,32 +19,30 @@ double filterPixel( std::vector<std::vector<int>> image,
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            // std::cout << "pixel (" << i << ", " << j << ")" << std::endl;
-            dist = util::computeEuclideanDistance(image, _distances, _weights, n, patchSize, pixelRow, pixelCol, i, j);
-            // std::cout << "distance = " << dist << std::endl;
+            dist = util::computePatchDistance(image, _distances, _weights, n, patchSize, pixelRow, pixelCol, i, j);
             weights[i * n + j] = util::computeWeight(dist, sigma);
-            // std::cout << "weight = " << weights[i * n + j] << std::endl << std::endl;
             sumW += weights[i * n + j];
         }
     }
 
     for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n;j++) {
-            res += (weights[i * n + j] / sumW) * image[i][j];
+        for (int j = 0; j < n; j++) {
+            res += (weights[i * n + j] / sumW) * image[i * n + j];
         }
     }
 
     return res;
 }
 
-std::vector<double> filterImage( std::vector<std::vector<int>> image, 
+std::vector<double> filterImage( std::vector<double> image, 
                                  int n, 
                                  int patchSize,  
                                  double patchSigma,
                                  double filterSigma )
 {
     std::vector<double> res(n * n);
-    std::vector<std::vector<double>> _distances = util::computeDistanceMatrix(image, n);
+    // std::vector<double> _distances = util::computeDistanceMatrix(image, n);
+    std::vector<double> _distances;
     std::vector<double> _weights = util::computeInsideWeights(patchSize, patchSigma);
 
     for (int i = 0; i < n; i++) {

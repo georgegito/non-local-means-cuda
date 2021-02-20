@@ -4,17 +4,22 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <string>
+#include <iterator>
+#include <fstream>
+#include <sstream>
 
 namespace util {
 
 // compute all-to-all-pixel squared distance: (p1_val - p2_val)^2
-std::vector<std::vector<double>> computeDistanceMatrix(std::vector<std::vector<int>> image, int n)
+std::vector<double> computeDistanceMatrix(std::vector<double> image, int n)
 {
-    std::vector<std::vector<double>> D(n * n, std::vector<double>(n * n));
+    std::vector<double> D(pow(n, 4));
 
     for (int i = 0; i < n * n; i++) {
         for (int j = 0; j < n * n; j++) {
-            D[i][j] = pow(image[i / n][i % n] - image[j / n][j % n], 2);
+            // D[i][j] = pow(image[i / n][i % n] - image[j / n][j % n], 2);
+            D[i * n * n + j] = pow(image[(i / n) * n + i % n] - image[(j / n) * n + j % n], 2);
         }
     }
 
@@ -22,7 +27,7 @@ std::vector<std::vector<double>> computeDistanceMatrix(std::vector<std::vector<i
 }
 
 // pixel-to-pixel squared distance from distance matrix
-double indexDistanceMatrix( std::vector<std::vector<double>> D, 
+double indexDistanceMatrix( std::vector<double> D, 
                             int n, 
                             int p1_row, 
                             int p1_col, 
@@ -32,7 +37,7 @@ double indexDistanceMatrix( std::vector<std::vector<double>> D,
     int _row = n * p1_row + p1_col;
     int _col = n * p2_row + p2_col;
 
-    return D[_row][_col];
+    return D[_row * n * n + _col];
 }
 
 bool isInBounds(int n, int x, int y) 
@@ -41,15 +46,15 @@ bool isInBounds(int n, int x, int y)
 }
 
 // patch-to-patch euclidean distance
-double computeEuclideanDistance( std::vector<std::vector<int>> image, 
-                                 std::vector<std::vector<double>> _distances, 
-                                 std::vector<double> _weights, 
-                                 int n, 
-                                 int patchSize, 
-                                 int p1_row, 
-                                 int p1_col, 
-                                 int p2_row, 
-                                 int p2_col ) 
+double computePatchDistance( std::vector<double> image, 
+                             std::vector<double> _distances, 
+                             std::vector<double> _weights, 
+                             int n, 
+                             int patchSize, 
+                             int p1_row, 
+                             int p1_col, 
+                             int p2_row, 
+                             int p2_col ) 
 {
     int p1_rowStart = p1_row - patchSize / 2;
     int p1_colStart = p1_col - patchSize / 2;
@@ -58,16 +63,15 @@ double computeEuclideanDistance( std::vector<std::vector<int>> image,
     double ans = 0;
 
     for (int i = 0; i < patchSize; i++) {
-        // TODO check for improvement
         for (int j = 0; j < patchSize; j++) {
-            if (isInBounds(n, p1_rowStart + i, p1_colStart + j) && isInBounds(n, p2_rowStart + i, p2_colStart + j)){
-                // ans += _weights[i * patchSize + j] * pow((image[p1_rowStart + i][p1_colStart + j] - image[p2_rowStart + i][p2_colStart + j]), 2);
-                ans += _weights[i * patchSize + j] * indexDistanceMatrix(_distances, n, p1_rowStart + i, p1_colStart + j, p2_rowStart + i, p2_colStart + j);
+            if (isInBounds(n, p1_rowStart + i, p1_colStart + j) && isInBounds(n, p2_rowStart + i, p2_colStart + j)) {
+                ans += _weights[i * patchSize + j] * pow((image[(p1_rowStart + i) * n + p1_colStart + j] - image[(p2_rowStart + i) * n + p2_colStart + j]), 2);
+                // ans += _weights[i * patchSize + j] * indexDistanceMatrix(_distances, n, p1_rowStart + i, p1_colStart + j, p2_rowStart + i, p2_colStart + j);
             }
         }
     }
 
-    return sqrt(ans);
+    return ans;
 }
 
 double computeWeight(double dist, double sigma) // compute weight without "/z(i)" division
@@ -85,8 +89,9 @@ std::vector<double> computeInsideWeights(int patchSize, double patchSigma)
 
     for (int i = 0; i < patchSize; i++) {
         for (int j = 0; j < patchSize; j++) {
-            _dist = sqrt(pow(centralPixelRow - i, 2) + pow(centralPixelCol - j, 2));
-            _weights[i * patchSize + j] = computeWeight(_dist, patchSigma);
+            _dist = pow(centralPixelRow - i, 2) + pow(centralPixelCol - j, 2);
+            // _weights[i * patchSize + j] = computeWeight(_dist, patchSigma);
+            _weights[i * patchSize + j] = exp(-_dist / (2 * pow(patchSigma, 2)));
             _sumW += _weights[i * patchSize + j];
         }
     }
@@ -99,7 +104,6 @@ std::vector<double> computeInsideWeights(int patchSize, double patchSigma)
 
     return _weights;
 }
-
 
 } // namespace util
 
@@ -116,17 +120,71 @@ void rowMajorVector(std::vector<double> vector, int n, int m)
     std::cout << std::endl;
 }
 
-void twoDimVector(std::vector<std::vector<double>> vector, int n, int m) {
+} // namespace prt
 
-    for (int i = 0; i < n * n; i++) {
-        for (int j = 0; j < n * n; j++) {
-            std::cout << vector[i][j] << "\t";
+namespace file {
+
+void write(std::vector<double> image, std::string fileName, int rowNum, int colNum)
+{
+    std::vector<std::string> out;
+
+    for (int i = 0; i < rowNum; i++) {
+        for (int j = 0; j < colNum; j++) {
+            out.push_back(std::to_string(image[i * colNum + j]) + " ");
         }
-        std::cout << std::endl;
+        out.push_back("\n");
     }
-    std::cout << std::endl;
+
+    std::ofstream output_file("./data/out/" + fileName + ".txt");
+    std::ostream_iterator<std::string> output_iterator(output_file, "");
+    std::copy(out.begin(), out.end(), output_iterator);
 }
 
-} // namespace prt
+void write_images(std::vector<double> filteredImage, std::vector<double> residual, std::string params, int rowNum, int colNum)
+{                            
+    std::string filteredName = "filtered_image_" + params;                            
+    file::write(filteredImage, filteredName, rowNum, colNum);
+
+    std::string resName = "residual_" + params;
+    file::write(residual, resName, rowNum, colNum);
+}
+
+std::vector<double> read(std::string filePath, int n, int m) 
+{
+    std::vector<double> image(n * m);
+    std::ifstream myfile(filePath);
+    std::ifstream input(filePath);
+    std::string s;
+
+    for (int i = 0; i < n; i++) {
+        std::getline(input, s);
+        std::istringstream iss(s);
+        std::string num;
+        int j = 0;
+        while (std::getline(iss, num, ',')) {
+            image[i * m + j++] = std::stof(num);
+        }
+    }
+
+    return image;
+}
+
+} // namespace file
+
+namespace test {
+
+bool mat(std::vector<double> mat_1, std::vector<double> mat_2, int n)
+{
+    for (int i = 0; i< n; i++){
+        for (int j=0; j < n; j++){
+            if (mat_1[i*n + j] != mat_2[i*n + j]){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+} // namespace test
 
 #endif // __UTILS_H__
