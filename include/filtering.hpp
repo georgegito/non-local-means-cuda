@@ -19,9 +19,8 @@ double filterPixel( std::vector<double> image,
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            std::cout << j << std::endl;
             // std::cout << "pixel (" << i << ", " << j << ")" << std::endl;
-            dist = util::computePatchDistance(_distances, _weights, n, patchSize, pixelRow, pixelCol, i, j);
+            dist = util::computePatchDistance(image, _distances, _weights, n, patchSize, pixelRow, pixelCol, i, j);
             // std::cout << "distance = " << dist << std::endl;
             weights[i * n + j] = util::computeWeight(dist, sigma);
             // std::cout << "weight = " << weights[i * n + j] << std::endl << std::endl;
@@ -30,7 +29,7 @@ double filterPixel( std::vector<double> image,
     }
 
     for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n;j++) {
+        for (int j = 0; j < n; j++) {
             res += (weights[i * n + j] / sumW) * image[i * n + j];
         }
     }
@@ -45,11 +44,13 @@ std::vector<double> filterImage( std::vector<double> image,
                                  double filterSigma )
 {
     std::vector<double> res(n * n);
-    std::vector<double> _distances = util::computeDistanceMatrix(image, n);
+    // std::vector<double> _distances = util::computeDistanceMatrix(image, n);
+    std::vector<double> _distances;
     std::vector<double> _weights = util::computeInsideWeights(patchSize, patchSigma);
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
+            // std::cout << j << std::endl;
             res[i * n + j] = filterPixel(image, _distances, _weights, n, patchSize, i, j, filterSigma);
         }
     }

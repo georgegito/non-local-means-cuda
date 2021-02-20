@@ -46,7 +46,8 @@ bool isInBounds(int n, int x, int y)
 }
 
 // patch-to-patch euclidean distance
-double computePatchDistance( std::vector<double> _distances, 
+double computePatchDistance( std::vector<double> image, 
+                             std::vector<double> _distances, 
                              std::vector<double> _weights, 
                              int n, 
                              int patchSize, 
@@ -64,14 +65,14 @@ double computePatchDistance( std::vector<double> _distances,
     for (int i = 0; i < patchSize; i++) {
         // TODO check for improvement
         for (int j = 0; j < patchSize; j++) {
-            if (isInBounds(n, p1_rowStart + i, p1_colStart + j) && isInBounds(n, p2_rowStart + i, p2_colStart + j)){
-                // ans += _weights[i * patchSize + j] * pow((image[p1_rowStart + i][p1_colStart + j] - image[p2_rowStart + i][p2_colStart + j]), 2);
-                ans += _weights[i * patchSize + j] * indexDistanceMatrix(_distances, n, p1_rowStart + i, p1_colStart + j, p2_rowStart + i, p2_colStart + j);
+            if (isInBounds(n, p1_rowStart + i, p1_colStart + j) && isInBounds(n, p2_rowStart + i, p2_colStart + j)) {
+                ans += _weights[i * patchSize + j] * pow((image[(p1_rowStart + i) * n + p1_colStart + j] - image[(p2_rowStart + i) * n + p2_colStart + j]), 2);
+                // ans += _weights[i * patchSize + j] * indexDistanceMatrix(_distances, n, p1_rowStart + i, p1_colStart + j, p2_rowStart + i, p2_colStart + j);
             }
         }
     }
 
-    return sqrt(ans);
+    return ans;
 }
 
 double computeWeight(double dist, double sigma) // compute weight without "/z(i)" division
@@ -89,8 +90,9 @@ std::vector<double> computeInsideWeights(int patchSize, double patchSigma)
 
     for (int i = 0; i < patchSize; i++) {
         for (int j = 0; j < patchSize; j++) {
-            _dist = sqrt(pow(centralPixelRow - i, 2) + pow(centralPixelCol - j, 2));
-            _weights[i * patchSize + j] = computeWeight(_dist, patchSigma);
+            _dist = pow(centralPixelRow - i, 2) + pow(centralPixelCol - j, 2);
+            // _weights[i * patchSize + j] = computeWeight(_dist, patchSigma);
+            _weights[i * patchSize + j] = exp(-_dist / (2 * pow(patchSigma, 2)));
             _sumW += _weights[i * patchSize + j];
         }
     }
@@ -103,7 +105,6 @@ std::vector<double> computeInsideWeights(int patchSize, double patchSigma)
 
     return _weights;
 }
-
 
 } // namespace util
 
