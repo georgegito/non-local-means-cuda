@@ -57,16 +57,16 @@ int main(int argc, char** argv)
 
     std::string dataPath = "data/";
     std::string filteredPath = dataPath + "filtered_image_" + 
-                                argv[1] + "_" + 
-                                argv[2] + "_" + 
-                                argv[3]; 
+                                std::to_string(patchSize) + "_" + 
+                                std::to_string(filterSigma) + "_" + 
+                                std::to_string(patchSigma); 
     file::write(filteredImage, filteredPath, n, n);
 
 
     std::string resPath = dataPath + "residual_" + 
-                                argv[1] + "_" + 
-                                argv[2] + "_" + 
-                                argv[3]; 
+                                std::to_string(patchSize) + "_" + 
+                                std::to_string(filterSigma) + "_" + 
+                                std::to_string(patchSigma); 
     file::write(res, resPath, n, n);
 
     std::cout << "Wrote the filtered image and the residual" << std::endl;
