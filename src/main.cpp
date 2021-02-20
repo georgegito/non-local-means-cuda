@@ -25,7 +25,7 @@ int main()
 /* ---------------------------- file reading test --------------------------- */
 
     std::vector<double> image(n * n);
-    image = file::read("./noised_house.txt", n, n);
+    image = file::read("./noisy_house.txt", n, n);
     // image = file::read("./house.txt", n, n);
 
     // prt::rowMajorVector(image, n, n);
