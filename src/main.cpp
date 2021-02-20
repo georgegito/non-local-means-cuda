@@ -4,11 +4,15 @@
 #include <cstdlib>
 #include <string> 
 
+/* -------------------------------------------------------------------------- */
+/*                     non-local-means cpu implementation                     */
+/* -------------------------------------------------------------------------- */
+
 int main(int argc, char** argv)
 {   
     std::cout << std::endl;
 
-/* ------------------------- house image parameters ------------------------- */
+/* ------------------------------- parameters ------------------------------- */
 
     int n = 64;
     int patchSize;
@@ -56,10 +60,9 @@ int main(int argc, char** argv)
 
 /* ------------------------------ file writing ------------------------------ */
 
-    std::string params = std::to_string(patchSize) + "_" + 
-                            std::to_string(filterSigma) + "_" + 
-                            std::to_string(patchSigma);
-    
+    std::string params = std::to_string(patchSize)   + "_" + 
+                         std::to_string(filterSigma) + "_" + 
+                         std::to_string(patchSigma);
 
     file::write_images(filteredImage, residual, params, n, n);
 
