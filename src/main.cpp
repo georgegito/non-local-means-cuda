@@ -39,7 +39,10 @@ int main(int argc, char** argv)
 
     std::vector<double> filteredImage = filterImage(image, n, patchSize, patchSigma, filterSigma);
 
-    std::cout << "Filtered the image" << std::endl;
+    std::cout << "Filtered the image with " << std::endl
+                << "Patch size " << patchSize << std::endl
+                << "Patch sigma " << patchSigma << std::endl
+                << "Filter Sigma " << filterSigma << std::endl << std::endl;
 
     std::vector<double> res(n *n);
     for (int i = 0; i < n; i++){
@@ -54,16 +57,16 @@ int main(int argc, char** argv)
 
     std::string dataPath = "data/";
     std::string filteredPath = dataPath + "filtered_image_" + 
-                                std::to_string(patchSize) + "_" + 
-                                std::to_string(filterSigma) + "_" + 
-                                std::to_string(patchSize); 
+                                argv[1] + "_" + 
+                                argv[2] + "_" + 
+                                argv[3]; 
     file::write(filteredImage, filteredPath, n, n);
 
 
     std::string resPath = dataPath + "residual_" + 
-                                std::to_string(patchSize) + "_" + 
-                                std::to_string(filterSigma) + "_" + 
-                                std::to_string(patchSize); 
+                                argv[1] + "_" + 
+                                argv[2] + "_" + 
+                                argv[3]; 
     file::write(res, resPath, n, n);
 
     std::cout << "Wrote the filtered image and the residual" << std::endl;
