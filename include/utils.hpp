@@ -173,4 +173,19 @@ std::vector<double> read(std::string filePath, int n, int m)
 
 } // namespace file
 
+namespace test {
+
+bool mat(std::vector<double> mat_1, std::vector<double> mat_2, int n) {
+    for (int i = 0; i< n; i++){
+        for (int j=0; j < n; j++){
+            if (mat_1[i*n + j] != mat_2[i*n + j]){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+}
+
 #endif // __UTILS_H__
