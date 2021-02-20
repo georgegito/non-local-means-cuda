@@ -63,7 +63,6 @@ double computePatchDistance( std::vector<double> image,
     double ans = 0;
 
     for (int i = 0; i < patchSize; i++) {
-        // TODO check for improvement
         for (int j = 0; j < patchSize; j++) {
             if (isInBounds(n, p1_rowStart + i, p1_colStart + j) && isInBounds(n, p2_rowStart + i, p2_colStart + j)) {
                 ans += _weights[i * patchSize + j] * pow((image[(p1_rowStart + i) * n + p1_colStart + j] - image[(p2_rowStart + i) * n + p2_colStart + j]), 2);
@@ -121,17 +120,6 @@ void rowMajorVector(std::vector<double> vector, int n, int m)
     std::cout << std::endl;
 }
 
-void twoDimVector(std::vector<std::vector<double>> vector, int n, int m) {
-
-    for (int i = 0; i < n * n; i++) {
-        for (int j = 0; j < n * n; j++) {
-            std::cout << vector[i][j] << "\t";
-        }
-        std::cout << std::endl;
-    }
-    std::cout << std::endl;
-}
-
 } // namespace prt
 
 namespace file {
@@ -176,7 +164,8 @@ std::vector<double> read(std::string filePath, int n, int m)
 
 namespace test {
 
-bool mat(std::vector<double> mat_1, std::vector<double> mat_2, int n) {
+bool mat(std::vector<double> mat_1, std::vector<double> mat_2, int n)
+{
     for (int i = 0; i< n; i++){
         for (int j=0; j < n; j++){
             if (mat_1[i*n + j] != mat_2[i*n + j]){
@@ -187,6 +176,6 @@ bool mat(std::vector<double> mat_1, std::vector<double> mat_2, int n) {
     return true;
 }
 
-}
+} // namespace test
 
 #endif // __UTILS_H__
