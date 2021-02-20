@@ -123,7 +123,7 @@ void rowMajorVector(std::vector<double> vector, int n, int m)
 } // namespace prt
 
 namespace file {
-    
+
 void write(std::vector<double> image, std::string fileName, int rowNum, int colNum)
 {
     std::vector<std::string> out;
@@ -135,9 +135,18 @@ void write(std::vector<double> image, std::string fileName, int rowNum, int colN
         out.push_back("\n");
     }
 
-    std::ofstream output_file("./" + fileName + ".txt");
+    std::ofstream output_file("./data/out/" + fileName + ".txt");
     std::ostream_iterator<std::string> output_iterator(output_file, "");
     std::copy(out.begin(), out.end(), output_iterator);
+}
+
+void write_images(std::vector<double> filteredImage, std::vector<double> residual, std::string params, int rowNum, int colNum)
+{                            
+    std::string filteredName = "filtered_image_" + params;                            
+    file::write(filteredImage, filteredName, rowNum, colNum);
+
+    std::string resName = "residual_" + params;
+    file::write(residual, resName, rowNum, colNum);
 }
 
 std::vector<double> read(std::string filePath, int n, int m) 
