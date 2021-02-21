@@ -8,8 +8,34 @@
 #include <iterator>
 #include <fstream>
 #include <sstream>
+#include <chrono>
 
 namespace util {
+
+class Timer {
+  public:
+    Timer(bool print) : print(print) {}
+
+    void start(std::string operation_desc)
+    {
+        _operation_desc = operation_desc;
+        t1              = std::chrono::high_resolution_clock::now();
+    }
+
+    void stop()
+    {
+        t2       = std::chrono::high_resolution_clock::now();
+        duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+        if (print)
+            std::cout << "\n" << _operation_desc << " time: " << duration / 1e3 << "ms\n" << std::endl;
+    }
+
+  private:
+    double duration;
+    bool print;
+    std::string _operation_desc;
+    std::chrono::high_resolution_clock::time_point t1, t2;
+};
 
 // compute all-to-all-pixel squared distance: (p1_val - p2_val)^2
 std::vector<double> computeDistanceMatrix(std::vector<double> image, int n)
