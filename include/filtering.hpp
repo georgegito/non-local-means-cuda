@@ -1,5 +1,5 @@
-#ifndef __FILTERING_H__
-#define __FILTERING_H__
+#ifndef __FILTERING_HPP__
+#define __FILTERING_HPP__
 
 #include <utils.hpp>
 
@@ -64,4 +64,4 @@ std::vector<double> filterImage( double* image,
     return res;
 }
 
-#endif // __FILTERING_H__
+#endif // __FILTERING_HPP__

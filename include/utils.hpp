@@ -182,12 +182,18 @@ void write(std::vector<double> image, std::string fileName, int rowNum, int colN
     std::copy(out.begin(), out.end(), output_iterator);
 }
 
-void write_images(std::vector<double> filteredImage, std::vector<double> residual, std::string params, int rowNum, int colNum)
+void write_images(std::vector<double> filteredImage, std::vector<double> residual, std::string params, int rowNum, int colNum, bool isCuda)
 {                            
-    std::string filteredName = "filtered_image_" + params;                            
+    std::string filteredName = "filtered_image_" + params;       
+    if (isCuda) {
+        filteredName = "cuda_" + filteredName;
+    }
     file::write(filteredImage, filteredName, rowNum, colNum);
 
     std::string resName = "residual_" + params;
+    if (isCuda) {
+        resName = "cuda_" + resName;
+    }
     file::write(residual, resName, rowNum, colNum);
 }
 
@@ -224,7 +230,7 @@ void out(std::vector<double> out, int n, int m)
         std::cout << "Test passed" << std::endl << std::endl;
     else
         std::cout << "Test failed" << std::endl << std::endl;
-        
+
 }
 
 } // namespace test

@@ -1,7 +1,6 @@
 CC=g++
-CFLAGS= -O3
-
 NVCC = nvcc
+CFLAGS= -O3
 
 BUILD_DIR=build
 SRC_DIR=src

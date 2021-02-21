@@ -1,12 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <filtering.hpp>
+#include <cudaFiltering.cuh>
 #include <cstdlib>
 #include <string> 
-
-/* -------------------------------------------------------------------------- */
-/*                     non-local-means cpu implementation                     */
-/* -------------------------------------------------------------------------- */
 
 int main(int argc, char** argv)
 {   
@@ -15,6 +12,7 @@ int main(int argc, char** argv)
 
 /* ------------------------------- parameters ------------------------------- */
 
+    bool isCuda = true;
     int n = 64;
     int patchSize;
     double filterSigma;
@@ -41,11 +39,37 @@ int main(int argc, char** argv)
 
     std::cout << "Image read" << std::endl;
 
-/* ----------------------------- image filtering ---------------------------- */
+/* -------------------------------------------------------------------------- */
+/*                             cpu image filtering                            */
+/* -------------------------------------------------------------------------- */
+
+    // timer.start("Filtering");
+
+    // std::vector<double> filteredImage = filterImage(image.data(), n, patchSize, patchSigma, filterSigma);
+
+    // timer.stop();
+
+    // std::cout   << "Image filtered: "   << std::endl
+    //             << "-Patch size "                << patchSize    << std::endl
+    //             << "-Patch sigma "               << patchSigma   << std::endl
+    //             << "-Filter Sigma "              << filterSigma  << std::endl  << std::endl;
+
+    // std::vector<double> residual(n *n);
+    // for (int i = 0; i < n; i++) {
+    //     for (int j = 0; j < n; j++) {
+    //         residual[i * n + j] = image[i * n + j] - filteredImage[i * n + j];
+    //     }
+    // }
+
+    // std::cout << "Residual calculated" << std::endl << std::endl;
+
+/* -------------------------------------------------------------------------- */
+/*                             gpu image filtering                            */
+/* -------------------------------------------------------------------------- */
 
     timer.start("Filtering");
 
-    std::vector<double> filteredImage = filterImage(image.data(), n, patchSize, patchSigma, filterSigma);
+    std::vector<double> filteredImage = cudaFilterImage(image.data(), n, patchSize, patchSigma, filterSigma);
 
     timer.stop();
 
@@ -69,7 +93,7 @@ int main(int argc, char** argv)
                          std::to_string(filterSigma) + "_" + 
                          std::to_string(patchSigma);
 
-    file::write_images(filteredImage, residual, params, n, n);
+    file::write_images(filteredImage, residual, params, n, n, isCuda);
 
     std::cout << "Filtered image written" << std::endl << std::endl;
     std::cout << "Residual written" << std::endl;
