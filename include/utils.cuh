@@ -37,35 +37,6 @@ class Timer {
     std::chrono::high_resolution_clock::time_point t1, t2;
 };
 
-// compute all-to-all-pixel squared distance: (p1_val - p2_val)^2
-std::vector<float > computeDistanceMatrix(std::vector<float > image, int n)
-{
-    std::vector<float > D(pow(n, 4));
-
-    for (int i = 0; i < n * n; i++) {
-        for (int j = 0; j < n * n; j++) {
-            // D[i][j] = pow(image[i / n][i % n] - image[j / n][j % n], 2);
-            D[i * n * n + j] = pow(image[(i / n) * n + i % n] - image[(j / n) * n + j % n], 2);
-        }
-    }
-
-    return D;
-}
-
-// pixel-to-pixel squared distance from distance matrix
-float indexDistanceMatrix( std::vector<float > D, 
-                            int n, 
-                            int p1_row, 
-                            int p1_col, 
-                            int p2_row, 
-                            int p2_col )
-{
-    int _row = n * p1_row + p1_col;
-    int _col = n * p2_row + p2_col;
-
-    return D[_row * n * n + _col];
-}
-
 __host__ __device__ bool isInBounds(int n, int x, int y) 
 {
     return x >= 0 && x < n && y >= 0 && y < n;
@@ -87,7 +58,6 @@ __host__ __device__ float computePatchDistance( float * image,
         for (int j = 0; j < patchSize; j++) {
             if (isInBounds(n, p1_rowStart + i, p1_colStart + j) && isInBounds(n, p2_rowStart + i, p2_colStart + j)) {
                 ans += _weights[i * patchSize + j] * pow((image[(p1_rowStart + i) * n + p1_colStart + j] - image[(p2_rowStart + i) * n + p2_colStart + j]), 2);
-                // ans += _weights[i * patchSize + j] * indexDistanceMatrix(_distances, n, p1_rowStart + i, p1_colStart + j, p2_rowStart + i, p2_colStart + j);
             }
         }
     }
@@ -100,7 +70,7 @@ __host__ __device__ float computeWeight(float dist, float sigma) // compute weig
     return exp(-dist / pow(sigma, 2));
 }
 
-std::vector<float > computeInsideWeights(int patchSize, float patchSigma)
+std::vector<float> computeInsideWeights(int patchSize, float patchSigma)
 {
     std::vector<float > _weights(patchSize * patchSize);
     int centralPixelRow = patchSize / 2;
@@ -111,7 +81,6 @@ std::vector<float > computeInsideWeights(int patchSize, float patchSigma)
     for (int i = 0; i < patchSize; i++) {
         for (int j = 0; j < patchSize; j++) {
             _dist = pow(centralPixelRow - i, 2) + pow(centralPixelCol - j, 2);
-            // _weights[i * patchSize + j] = computeWeight(_dist, patchSigma);
             _weights[i * patchSize + j] = exp(-_dist / (2 * pow(patchSigma, 2)));
             _sumW += _weights[i * patchSize + j];
         }
@@ -130,7 +99,7 @@ std::vector<float > computeInsideWeights(int patchSize, float patchSigma)
 
 namespace prt {
 
-void rowMajorVector(std::vector<float > vector, int n, int m)
+void rowMajorVector(std::vector<float> vector, int n, int m)
 {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
@@ -145,7 +114,7 @@ void rowMajorVector(std::vector<float > vector, int n, int m)
 
 namespace file {
 
-std::vector<float > read(std::string filePath, int n, int m, char delim) 
+std::vector<float> read(std::string filePath, int n, int m, char delim) 
 {
     std::vector<float > image(n * m);
     std::ifstream myfile(filePath);
@@ -165,7 +134,7 @@ std::vector<float > read(std::string filePath, int n, int m, char delim)
     return image;
 }
 
-void write(std::vector<float > image, std::string fileName, int rowNum, int colNum)
+void write(std::vector<float> image, std::string fileName, int rowNum, int colNum)
 {
     std::vector<std::string> out;
 
@@ -200,36 +169,16 @@ void write_images(std::vector<float > filteredImage, std::vector<float > residua
 
 namespace test {
 
-bool mat(std::vector<float > mat_1, std::vector<float > mat_2, int n)
+bool mat(std::vector<float> mat_1, std::vector<float> mat_2, int n)
 {
-    for (int i = 0; i< n; i++){
-        for (int j=0; j < n; j++){
-            if (mat_1[i*n + j] != mat_2[i*n + j]){
+    for (int i = 0; i< n; i++) {
+        for (int j=0; j < n; j++) {
+            if (mat_1[i * n + j] != mat_2[i * n + j]) {
                 return false;
             }
         }
     }
     return true;
-}
-
-void out(std::vector<float > out, int n, int m)
-{
-    std::vector<float > expectedOut = file::read("./data/out/expected_out.txt", n, m, ' ');
-    
-    // prt::rowMajorVector(expectedOut, n, m);
-
-    int flag = 0;
-    
-    for (int i = 0; i < n * m; i++) {
-        if (out[i] - std::fmod(out[i], 0.01) != expectedOut[i] - std::fmod(expectedOut[i], 0.01))
-            flag = 1;
-    }
-
-    if (flag == 0) 
-        std::cout << "Test passed" << std::endl << std::endl;
-    else
-        std::cout << "Test failed" << std::endl << std::endl;
-
 }
 
 } // namespace test
