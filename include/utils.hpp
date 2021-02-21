@@ -72,20 +72,16 @@ bool isInBounds(int n, int x, int y)
 }
 
 // patch-to-patch euclidean distance
-double computePatchDistance( std::vector<double> image, 
-                             std::vector<double> _distances, 
-                             std::vector<double> _weights, 
+double computePatchDistance( double* image, 
+                             double* _distances, 
+                             double* _weights, 
                              int n, 
                              int patchSize, 
-                             int p1_row, 
-                             int p1_col, 
-                             int p2_row, 
-                             int p2_col ) 
+                             int p1_rowStart, 
+                             int p1_colStart, 
+                             int p2_rowStart, 
+                             int p2_colStart ) 
 {
-    int p1_rowStart = p1_row - patchSize / 2;
-    int p1_colStart = p1_col - patchSize / 2;
-    int p2_rowStart = p2_row - patchSize / 2;
-    int p2_colStart = p2_col - patchSize / 2;
     double ans = 0;
 
     for (int i = 0; i < patchSize; i++) {
@@ -150,6 +146,26 @@ void rowMajorVector(std::vector<double> vector, int n, int m)
 
 namespace file {
 
+std::vector<double> read(std::string filePath, int n, int m, char delim) 
+{
+    std::vector<double> image(n * m);
+    std::ifstream myfile(filePath);
+    std::ifstream input(filePath);
+    std::string s;
+
+    for (int i = 0; i < n; i++) {
+        std::getline(input, s);
+        std::istringstream iss(s);
+        std::string num;
+        int j = 0;
+        while (std::getline(iss, num, delim)) {
+            image[i * m + j++] = std::stof(num);
+        }
+    }
+
+    return image;
+}
+
 void write(std::vector<double> image, std::string fileName, int rowNum, int colNum)
 {
     std::vector<std::string> out;
@@ -175,26 +191,6 @@ void write_images(std::vector<double> filteredImage, std::vector<double> residua
     file::write(residual, resName, rowNum, colNum);
 }
 
-std::vector<double> read(std::string filePath, int n, int m) 
-{
-    std::vector<double> image(n * m);
-    std::ifstream myfile(filePath);
-    std::ifstream input(filePath);
-    std::string s;
-
-    for (int i = 0; i < n; i++) {
-        std::getline(input, s);
-        std::istringstream iss(s);
-        std::string num;
-        int j = 0;
-        while (std::getline(iss, num, ',')) {
-            image[i * m + j++] = std::stof(num);
-        }
-    }
-
-    return image;
-}
-
 } // namespace file
 
 namespace test {
@@ -209,6 +205,26 @@ bool mat(std::vector<double> mat_1, std::vector<double> mat_2, int n)
         }
     }
     return true;
+}
+
+void out(std::vector<double> out, int n, int m)
+{
+    std::vector<double> expectedOut = file::read("./data/out/expected_out.txt", n, m, ' ');
+    
+    // prt::rowMajorVector(expectedOut, n, m);
+
+    int flag = 0;
+    
+    for (int i = 0; i < n * m; i++) {
+        if (out[i] - std::fmod(out[i], 0.01) != expectedOut[i] - std::fmod(expectedOut[i], 0.01))
+            flag = 1;
+    }
+
+    if (flag == 0) 
+        std::cout << "Test passed" << std::endl << std::endl;
+    else
+        std::cout << "Test failed" << std::endl << std::endl;
+        
 }
 
 } // namespace test

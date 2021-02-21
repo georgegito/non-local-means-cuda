@@ -37,7 +37,7 @@ int main(int argc, char** argv)
 /* ------------------------------ file reading ------------------------------ */
 
     std::vector<double> image(n * n);
-    image = file::read("./data/in/noisy_house.txt", n, n);
+    image = file::read("./data/in/noisy_house.txt", n, n, ',');
 
     std::cout << "Image read" << std::endl;
 
@@ -45,7 +45,7 @@ int main(int argc, char** argv)
 
     timer.start("Filtering");
 
-    std::vector<double> filteredImage = filterImage(image, n, patchSize, patchSigma, filterSigma);
+    std::vector<double> filteredImage = filterImage(image.data(), n, patchSize, patchSigma, filterSigma);
 
     timer.stop();
 
