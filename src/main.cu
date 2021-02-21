@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <filtering.hpp>
+#include <filtering.cuh>
 #include <cudaFiltering.cuh>
 #include <cstdlib>
 #include <string> 

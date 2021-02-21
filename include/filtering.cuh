@@ -1,10 +1,9 @@
-#ifndef __FILTERING_HPP__
-#define __FILTERING_HPP__
+#ifndef __FILTERING_CUH__
+#define __FILTERING_CUH__
 
-#include <utils.hpp>
+#include <utils.cuh>
 
 double filterPixel( double* image, 
-                    double* _distances, 
                     double* _weights, 
                     int n, 
                     int patchSize, 
@@ -21,8 +20,7 @@ double filterPixel( double* image,
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            dist = util::computePatchDistance(  image, 
-                                                _distances, 
+            dist = util::computePatchDistance(  image,  
                                                 _weights, 
                                                 n, 
                                                 patchSize, 
@@ -52,16 +50,15 @@ std::vector<double> filterImage( double* image,
 {
     std::vector<double> res(n * n);
     // std::vector<double> _distances = util::computeDistanceMatrix(image, n);
-    double* _distances;
     double* _weights = util::computeInsideWeights(patchSize, patchSigma).data();
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            res[i * n + j] = filterPixel(image, _distances, _weights, n, patchSize, i, j, filterSigma);
+            res[i * n + j] = filterPixel(image, _weights, n, patchSize, i, j, filterSigma);
         }
     }
 
     return res;
 }
 
-#endif // __FILTERING_HPP__
+#endif // __FILTERING_CUH__

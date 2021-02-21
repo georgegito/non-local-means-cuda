@@ -1,5 +1,5 @@
-#ifndef __UTILS_H__
-#define __UTILS_H__
+#ifndef __UTILS_CUH__
+#define __UTILS_CUH__
 
 #include <iostream>
 #include <vector>
@@ -66,14 +66,13 @@ double indexDistanceMatrix( std::vector<double> D,
     return D[_row * n * n + _col];
 }
 
-bool isInBounds(int n, int x, int y) 
+__host__ __device__ bool isInBounds(int n, int x, int y) 
 {
     return x >= 0 && x < n && y >= 0 && y < n;
 }
 
 // patch-to-patch euclidean distance
-double computePatchDistance( double* image, 
-                             double* _distances, 
+__host__ __device__ double computePatchDistance( double* image, 
                              double* _weights, 
                              int n, 
                              int patchSize, 
@@ -96,7 +95,7 @@ double computePatchDistance( double* image,
     return ans;
 }
 
-double computeWeight(double dist, double sigma) // compute weight without "/z(i)" division
+__host__ __device__ double computeWeight(double dist, double sigma) // compute weight without "/z(i)" division
 {
     return exp(-dist / pow(sigma, 2));
 }
@@ -235,4 +234,4 @@ void out(std::vector<double> out, int n, int m)
 
 } // namespace test
 
-#endif // __UTILS_H__
+#endif // __UTILS_CUH__
