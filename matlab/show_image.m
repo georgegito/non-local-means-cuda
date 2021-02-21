@@ -1,7 +1,7 @@
 clc; clear; close all;
 Files=dir('../data/out/*');
 for k=1:length(Files)
-    if startsWith(Files(k).name,'.')
+    if startsWith(Files(k).name,'.') || startsWith(Files(k).name,'e')
         continue
     end
     path = "../data/out/" + Files(k).name;

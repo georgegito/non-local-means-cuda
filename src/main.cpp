@@ -22,8 +22,8 @@ int main(int argc, char** argv)
 
     if (argc == 1) {
         patchSize = 5;
-        filterSigma = 0.03;
-        patchSigma = 0.7;
+        filterSigma = 0.06;
+        patchSigma = 0.8;
     }
     else if(argc == 4) {
         patchSize = atoi(argv[1]);
