@@ -18,17 +18,17 @@ for k=1:length(Files)
     if contains(path, 'filtered')
         name = [cuda 'Filtered image'];
         tmp = split(path, '_');
-        tmptmp = split(tmp(5 + idx), '.txt');
+        tmptmp = split(tmp(5 + idx), '.txt')
         patchSize = tmp(3 + idx);
-        patchSigma = tmp(4 + idx);
-        filterSigma = tmptmp(1 + idx);
+        filterSigma = tmp(4 + idx);
+        patchSigma = tmptmp(1);
     else 
         name = [cuda 'Residual'];
         tmp = split(path, '_');
-        tmptmp = split(tmp(4 + idx), '.txt');
+        tmptmp = split(tmp(4 + idx), '.txt')
         patchSize = tmp(2 + idx);
-        patchSigma = tmp(3 + idx);
-        filterSigma = tmptmp(1 + idx);    
+        filterSigma = tmp(3 + idx);
+        patchSigma = tmptmp(1);    
     end
     
     figure('Name', name);

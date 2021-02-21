@@ -31,16 +31,16 @@ class Timer {
     }
 
   private:
-    double duration;
+    float duration;
     bool print;
     std::string _operation_desc;
     std::chrono::high_resolution_clock::time_point t1, t2;
 };
 
 // compute all-to-all-pixel squared distance: (p1_val - p2_val)^2
-std::vector<double> computeDistanceMatrix(std::vector<double> image, int n)
+std::vector<float > computeDistanceMatrix(std::vector<float > image, int n)
 {
-    std::vector<double> D(pow(n, 4));
+    std::vector<float > D(pow(n, 4));
 
     for (int i = 0; i < n * n; i++) {
         for (int j = 0; j < n * n; j++) {
@@ -53,7 +53,7 @@ std::vector<double> computeDistanceMatrix(std::vector<double> image, int n)
 }
 
 // pixel-to-pixel squared distance from distance matrix
-double indexDistanceMatrix( std::vector<double> D, 
+float indexDistanceMatrix( std::vector<float > D, 
                             int n, 
                             int p1_row, 
                             int p1_col, 
@@ -72,8 +72,8 @@ __host__ __device__ bool isInBounds(int n, int x, int y)
 }
 
 // patch-to-patch euclidean distance
-__host__ __device__ double computePatchDistance( double* image, 
-                             double* _weights, 
+__host__ __device__ float computePatchDistance( float * image, 
+                             float * _weights, 
                              int n, 
                              int patchSize, 
                              int p1_rowStart, 
@@ -81,7 +81,7 @@ __host__ __device__ double computePatchDistance( double* image,
                              int p2_rowStart, 
                              int p2_colStart ) 
 {
-    double ans = 0;
+    float ans = 0;
 
     for (int i = 0; i < patchSize; i++) {
         for (int j = 0; j < patchSize; j++) {
@@ -95,18 +95,18 @@ __host__ __device__ double computePatchDistance( double* image,
     return ans;
 }
 
-__host__ __device__ double computeWeight(double dist, double sigma) // compute weight without "/z(i)" division
+__host__ __device__ float computeWeight(float dist, float sigma) // compute weight without "/z(i)" division
 {
     return exp(-dist / pow(sigma, 2));
 }
 
-std::vector<double> computeInsideWeights(int patchSize, double patchSigma)
+std::vector<float > computeInsideWeights(int patchSize, float patchSigma)
 {
-    std::vector<double> _weights(patchSize * patchSize);
+    std::vector<float > _weights(patchSize * patchSize);
     int centralPixelRow = patchSize / 2;
     int centralPixelCol = centralPixelRow;
-    double _dist;
-    double _sumW = 0;
+    float _dist;
+    float _sumW = 0;
 
     for (int i = 0; i < patchSize; i++) {
         for (int j = 0; j < patchSize; j++) {
@@ -130,7 +130,7 @@ std::vector<double> computeInsideWeights(int patchSize, double patchSigma)
 
 namespace prt {
 
-void rowMajorVector(std::vector<double> vector, int n, int m)
+void rowMajorVector(std::vector<float > vector, int n, int m)
 {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
@@ -145,9 +145,9 @@ void rowMajorVector(std::vector<double> vector, int n, int m)
 
 namespace file {
 
-std::vector<double> read(std::string filePath, int n, int m, char delim) 
+std::vector<float > read(std::string filePath, int n, int m, char delim) 
 {
-    std::vector<double> image(n * m);
+    std::vector<float > image(n * m);
     std::ifstream myfile(filePath);
     std::ifstream input(filePath);
     std::string s;
@@ -165,7 +165,7 @@ std::vector<double> read(std::string filePath, int n, int m, char delim)
     return image;
 }
 
-void write(std::vector<double> image, std::string fileName, int rowNum, int colNum)
+void write(std::vector<float > image, std::string fileName, int rowNum, int colNum)
 {
     std::vector<std::string> out;
 
@@ -181,7 +181,7 @@ void write(std::vector<double> image, std::string fileName, int rowNum, int colN
     std::copy(out.begin(), out.end(), output_iterator);
 }
 
-void write_images(std::vector<double> filteredImage, std::vector<double> residual, std::string params, int rowNum, int colNum, bool isCuda)
+void write_images(std::vector<float > filteredImage, std::vector<float > residual, std::string params, int rowNum, int colNum, bool isCuda)
 {                            
     std::string filteredName = "filtered_image_" + params;       
     if (isCuda) {
@@ -200,7 +200,7 @@ void write_images(std::vector<double> filteredImage, std::vector<double> residua
 
 namespace test {
 
-bool mat(std::vector<double> mat_1, std::vector<double> mat_2, int n)
+bool mat(std::vector<float > mat_1, std::vector<float > mat_2, int n)
 {
     for (int i = 0; i< n; i++){
         for (int j=0; j < n; j++){
@@ -212,9 +212,9 @@ bool mat(std::vector<double> mat_1, std::vector<double> mat_2, int n)
     return true;
 }
 
-void out(std::vector<double> out, int n, int m)
+void out(std::vector<float > out, int n, int m)
 {
-    std::vector<double> expectedOut = file::read("./data/out/expected_out.txt", n, m, ' ');
+    std::vector<float > expectedOut = file::read("./data/out/expected_out.txt", n, m, ' ');
     
     // prt::rowMajorVector(expectedOut, n, m);
 

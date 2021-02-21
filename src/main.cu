@@ -15,8 +15,8 @@ int main(int argc, char** argv)
     bool isCuda = true;
     int n = 64;
     int patchSize;
-    double filterSigma;
-    double patchSigma;
+    float filterSigma;
+    float patchSigma;
 
     if (argc == 1) {
         patchSize = 5;
@@ -34,7 +34,7 @@ int main(int argc, char** argv)
 
 /* ------------------------------ file reading ------------------------------ */
 
-    std::vector<double> image(n * n);
+    std::vector<float> image(n * n);
     image = file::read("./data/in/noisy_house.txt", n, n, ',');
 
     std::cout << "Image read" << std::endl;
@@ -43,48 +43,35 @@ int main(int argc, char** argv)
 /*                             cpu image filtering                            */
 /* -------------------------------------------------------------------------- */
 
-    // timer.start("Filtering");
+    // timer.start("CPU Filtering");
 
-    // std::vector<double> filteredImage = filterImage(image.data(), n, patchSize, patchSigma, filterSigma);
+    // std::vector<float> cpuFilteredImage = filterImage(image.data(), n, patchSize, patchSigma, filterSigma);
 
     // timer.stop();
-
-    // std::cout   << "Image filtered: "   << std::endl
-    //             << "-Patch size "                << patchSize    << std::endl
-    //             << "-Patch sigma "               << patchSigma   << std::endl
-    //             << "-Filter Sigma "              << filterSigma  << std::endl  << std::endl;
-
-    // std::vector<double> residual(n *n);
-    // for (int i = 0; i < n; i++) {
-    //     for (int j = 0; j < n; j++) {
-    //         residual[i * n + j] = image[i * n + j] - filteredImage[i * n + j];
-    //     }
-    // }
-
-    // std::cout << "Residual calculated" << std::endl << std::endl;
 
 /* -------------------------------------------------------------------------- */
 /*                             gpu image filtering                            */
 /* -------------------------------------------------------------------------- */
 
-    timer.start("Filtering");
+    timer.start("GPU Filtering");
 
-    std::vector<double> filteredImage = cudaFilterImage(image.data(), n, patchSize, patchSigma, filterSigma);
+    std::vector<float> filteredImage = cudaFilterImage(image.data(), n, patchSize, patchSigma, filterSigma);
 
     timer.stop();
 
-    std::cout   << "Image filtered: "   << std::endl
-                << "-Patch size "                << patchSize    << std::endl
-                << "-Patch sigma "               << patchSigma   << std::endl
-                << "-Filter Sigma "              << filterSigma  << std::endl  << std::endl;
+    // prt::rowMajorVector(filteredImage, n, n);
 
-    std::vector<double> residual(n *n);
+    std::cout   << "Image filtered: "   << std::endl
+                << "-Patch size "       << patchSize    << std::endl
+                << "-Patch sigma "      << patchSigma   << std::endl
+                << "-Filter Sigma "     << filterSigma  << std::endl  << std::endl;
+
+    std::vector<float> residual(n * n);
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             residual[i * n + j] = image[i * n + j] - filteredImage[i * n + j];
         }
     }
-
     std::cout << "Residual calculated" << std::endl << std::endl;
 
 /* ------------------------------ file writing ------------------------------ */

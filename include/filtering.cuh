@@ -3,18 +3,18 @@
 
 #include <utils.cuh>
 
-double filterPixel( double* image, 
-                    double* _weights, 
-                    int n, 
-                    int patchSize, 
-                    int pixelRow, 
-                    int pixelCol, 
-                    double sigma )
+float filterPixel( float * image, 
+                   float * _weights, 
+                   int n, 
+                   int patchSize, 
+                   int pixelRow, 
+                   int pixelCol, 
+                   float sigma )
 {
-    double res = 0;
-    double sumW = 0;                    // sumW is the Z(i) of w(i, j) formula
-    double dist;
-    std::vector<double> weights(n * n);
+    float res = 0;
+    float sumW = 0;                    // sumW is the Z(i) of w(i, j) formula
+    float dist;
+    std::vector<float> weights(n * n);
     int patchRowStart = pixelRow - patchSize / 2;
     int patchColStart = pixelCol - patchSize / 2;
 
@@ -42,15 +42,15 @@ double filterPixel( double* image,
     return res;
 }
 
-std::vector<double> filterImage( double* image, 
+std::vector<float > filterImage( float * image, 
                                  int n, 
                                  int patchSize,  
-                                 double patchSigma,
-                                 double filterSigma )
+                                 float patchSigma,
+                                 float filterSigma )
 {
-    std::vector<double> res(n * n);
-    // std::vector<double> _distances = util::computeDistanceMatrix(image, n);
-    double* _weights = util::computeInsideWeights(patchSize, patchSigma).data();
+    std::vector<float > res(n * n);
+    // std::vector<float > _distances = util::computeDistanceMatrix(image, n);
+    float * _weights = util::computeInsideWeights(patchSize, patchSigma).data();
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
