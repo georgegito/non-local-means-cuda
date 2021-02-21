@@ -7,8 +7,10 @@ for k=1:length(Files)
     path = "../data/out/" + Files(k).name;
     image = dlmread(path);
     
+    idx = 0;
     if contains(path, 'cuda')
         cuda = 'CUDA ';
+        idx = 1;
     else
         cuda = ''; 
     end
@@ -16,17 +18,17 @@ for k=1:length(Files)
     if contains(path, 'filtered')
         name = [cuda 'Filtered image'];
         tmp = split(path, '_');
-        tmptmp = split(tmp(5), '.txt');
-        patchSize = tmp(3);
-        patchSigma = tmp(4);
-        filterSigma = tmptmp(1);
+        tmptmp = split(tmp(5 + idx), '.txt');
+        patchSize = tmp(3 + idx);
+        patchSigma = tmp(4 + idx);
+        filterSigma = tmptmp(1 + idx);
     else 
         name = [cuda 'Residual'];
         tmp = split(path, '_');
-        tmptmp = split(tmp(4), '.txt');
-        patchSize = tmp(2);
-        patchSigma = tmp(3);
-        filterSigma = tmptmp(1);    
+        tmptmp = split(tmp(4 + idx), '.txt');
+        patchSize = tmp(2 + idx);
+        patchSigma = tmp(3 + idx);
+        filterSigma = tmptmp(1 + idx);    
     end
     
     figure('Name', name);
