@@ -1,6 +1,6 @@
 clc; clear;
 
-I = imread('../data/images/flower.jpg');
+I = imread('../data/images/lena.jpg');
 J = imnoise (I, 'gaussian');
 figure();
 imshow(I);
@@ -12,7 +12,7 @@ normJ = mat2gray(J)
 figure();
 imshow(normJ);
 
-save('flower.mat', 'normJ');
-data=load('flower.mat');
+save('lena.mat', 'normJ');
+data=load('lena.mat');
 field=fieldnames(data);
-dlmwrite('flower.txt', data.(field{1}));
+dlmwrite('lena.txt', data.(field{1}));
