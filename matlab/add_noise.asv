@@ -1,5 +1,0 @@
-clc; clear;
-
-I = imread('../data/images/flower.jpg');
-J = imnoise (I, 'gauss')
-imshow(I)
