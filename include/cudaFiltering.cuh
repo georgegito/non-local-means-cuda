@@ -13,34 +13,42 @@ __global__ void computeWeights( float *image,
                                 int patchRowStart,
                                 int patchColStart,
                                 float sigma,
-                                float *weights )
+                                float *weights,
+                                float *temp)
 {
-    __shared__ double patches[PATCHSIZE * N];
+    *temp = 0;
+
+    __shared__ float patches[PATCHSIZE * N];
 
     int index = threadIdx.x + blockIdx.x * blockDim.x;
     int row = index / n;
     int col = index % n;
 
-    for (int i =- patchSize / 2; i <= patchSize / 2){
-        if( utils::isInBounds((i + row), col, n) ){
-            patches[col + (i + 1) * n] = image[col + (i + row) * n];
-        }
-         
-    }
-
     if (index >= n * n){
         return;
     }
 
-    float dist = util::computePatchDistance( image, 
-                                             _weights, 
-                                             n, 
-                                             patchSize, 
-                                             patchRowStart, 
-                                             patchColStart, 
-                                             row - patchSize / 2, 
-                                             col - patchSize / 2 );
-    weights[index] =  util::computeWeight(dist, sigma);
+    for (int i =0; i < patchSize; i++){
+        if( i + row - patchSize / 2 > 0 && i + row - patchSize / 2 < n - 1 ){
+            patches[col + i * patchSize] = image[col + (i + row - patchSize / 2) * n];
+        }         
+    }
+
+    __syncthreads();
+
+    float dist = util::cudaComputePatchDistance( image, 
+                                            _weights, 
+                                            n, 
+                                            patchSize, 
+                                            patchRowStart, 
+                                            patchColStart, 
+                                            patches,
+                                            row - patchSize / 2, 
+                                            col - patchSize / 2 );
+
+
+
+    weights[index] = util::computeWeight(dist, sigma);
 
 }
 
@@ -63,7 +71,6 @@ float cudaFilterPixel( float * image,
     int size_image = n * n * sizeof(float );
     int size_insideWeights = patchSize * patchSize * sizeof(float );
 
-    // Alloc space for device copies of a, b, c
     cudaMalloc((void **)&d_image, size_image);
     cudaMalloc((void **)&d_insideWeights, size_insideWeights);
     cudaMalloc((void **)&d_weights, size_image);
@@ -71,6 +78,9 @@ float cudaFilterPixel( float * image,
     cudaMemcpy(d_image, image, size_image, cudaMemcpyHostToDevice);
     cudaMemcpy(d_insideWeights, _weights, size_insideWeights, cudaMemcpyHostToDevice);
 
+    float *d_temp;
+    cudaMalloc((void **)&d_temp, sizeof(float));
+    
     computeWeights<<<n, n>>>( d_image,
                               d_insideWeights,
                               n,
@@ -78,7 +88,11 @@ float cudaFilterPixel( float * image,
                               patchRowStart,
                               patchColStart,
                               sigma,
-                              d_weights);
+                              d_weights,
+                              d_temp);
+
+    // float *temp = (float *)malloc(sizeof(float));
+    cudaFree(d_temp);
 
     cudaMemcpy(weights.data(), d_weights, size_image, cudaMemcpyDeviceToHost);
 

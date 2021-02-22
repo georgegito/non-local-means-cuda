@@ -13,14 +13,14 @@ int main(int argc, char** argv)
 /* ------------------------------- parameters ------------------------------- */
 
     bool isCuda;
-    int n = 256;
+    int n = 64;
     int patchSize;
     float filterSigma;
     float patchSigma;
 
     if (argc == 1) {
         patchSize = 5;
-        filterSigma = 0.1;
+        filterSigma = 0.02;
         patchSigma = 0.8;
     }
     else if(argc == 4) {
@@ -35,7 +35,7 @@ int main(int argc, char** argv)
 /* ------------------------------ file reading ------------------------------ */
 
     std::vector<float> image(n * n);
-    image = file::read("./data/in/noisy_lena.txt", n, n, ',');
+    image = file::read("./data/in/noisy_house.txt", n, n, ',');
 
     std::cout << "Image read" << std::endl;
 

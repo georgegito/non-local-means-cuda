@@ -65,6 +65,50 @@ __host__ __device__ float computePatchDistance( float * image,
     return ans;
 }
 
+__device__ int checkOverlay(float *image, 
+                            float *patches, 
+                            int n,
+                            int patchSize, 
+                            int patchesRowStart, 
+                            int row, 
+                            int col)
+{
+    for (int i = 0; i < patchSize; i++){
+        if (row == patchesRowStart + i){
+            return patches[i * n + col];
+        }
+    }
+    
+    return image[row * n + col];
+}
+
+// patch-to-patch euclidean distance
+__device__ float cudaComputePatchDistance(  float * image, 
+                                            float * _weights, 
+                                            int n, 
+                                            int patchSize, 
+                                            int p1_rowStart, 
+                                            int p1_colStart, 
+                                            float *patches,
+                                            int p2_rowStart, 
+                                            int p2_colStart ) 
+{
+
+    float ans = 0;
+
+    for (int i = 0; i < patchSize; i++) {
+        for (int j = 0; j < patchSize; j++) {
+            if (isInBounds(n, p1_rowStart + i, p1_colStart + j) && isInBounds(n, p2_rowStart + i, p2_colStart + j)) {
+                ans += _weights[i * patchSize + j] * 
+                        pow((patches[i * n + p1_colStart + j] - 
+                            checkOverlay(image, patches, n, patchSize, p1_rowStart, p2_rowStart + i, p2_colStart + j)), 2);
+            }
+        }
+    }
+
+    return ans;
+}
+
 __host__ __device__ float computeWeight(float dist, float sigma) // compute weight without "/z(i)" division
 {
     return exp(-dist / pow(sigma, 2));
