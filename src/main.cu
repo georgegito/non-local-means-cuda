@@ -12,16 +12,16 @@ int main(int argc, char** argv)
 
 /* ------------------------------- parameters ------------------------------- */
 
-    bool isCuda = false;
-    int n = 64;
+    bool isCuda;
+    int n = 128;
     int patchSize;
     float filterSigma;
     float patchSigma;
 
     if (argc == 1) {
         patchSize = 5;
-        filterSigma = 0.02;
-        patchSigma = 5./3;
+        filterSigma = 0.1;
+        patchSigma = 0.8;
     }
     else if(argc == 4) {
         patchSize = atoi(argv[1]);
@@ -35,7 +35,7 @@ int main(int argc, char** argv)
 /* ------------------------------ file reading ------------------------------ */
 
     std::vector<float> image(n * n);
-    image = file::read("./data/in/noisy_house.txt", n, n, ',');
+    image = file::read("./data/in/noisy_flower.txt", n, n, ',');
 
     std::cout << "Image read" << std::endl;
 
@@ -49,20 +49,29 @@ int main(int argc, char** argv)
 
     timer.stop();
 
+    isCuda = false;
+
 /* -------------------------------------------------------------------------- */
 /*                             gpu image filtering                            */
 /* -------------------------------------------------------------------------- */
 
-//     timer.start("GPU Filtering");
+    // timer.start("GPU Filtering");
 
-//     std::vector<float> filteredImage = cudaFilterImage(image.data(), n, patchSize, patchSigma, filterSigma);
+    // std::vector<float> filteredImage = cudaFilterImage(image.data(), n, patchSize, patchSigma, filterSigma);
 
-//     timer.stop();
+    // timer.stop();
+
+    // isCuda = true;
 
     std::cout   << "Image filtered: "   << std::endl
                 << "-Patch size "       << patchSize    << std::endl
                 << "-Patch sigma "      << patchSigma   << std::endl
                 << "-Filter Sigma "     << filterSigma  << std::endl  << std::endl;
+
+
+/* -------------------------------------------------------------------------- */
+/*                             calculate residual                             */
+/* -------------------------------------------------------------------------- */
 
     std::vector<float> residual(n * n);
     for (int i = 0; i < n; i++) {
