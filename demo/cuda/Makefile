@@ -1,15 +1,10 @@
 SHELL := /bin/bash # Use bash syntax
 
-CC = sm_20
-
-NVCC	= nvcc -arch=$(CC)
-SAMPLE	= sampleAddKernel
-ARGS	= -ptx
+NVCC	= nvcc
+SAMPLE	= sample
 
 all: sample
 
 sample:
-	$(NVCC) $(ARGS) $(SAMPLE).cu
+	$(NVCC) $(SAMPLE).cu -o $(SAMPLE)
 
-clean:
-	rm -rf *~ *.ptx
