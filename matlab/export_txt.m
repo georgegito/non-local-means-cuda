@@ -1,5 +1,3 @@
-load('ws.mat');
-
 save('house.mat', 'I');
 save('noised_house.mat', 'J');
 
