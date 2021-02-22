@@ -3,6 +3,9 @@
 
 #include <utils.cuh>
 
+#define PATCHSIZE 5
+#define N 56
+
 __global__ void computeWeights( float *image,
                                 float *_weights,
                                 int n,
@@ -12,9 +15,18 @@ __global__ void computeWeights( float *image,
                                 float sigma,
                                 float *weights )
 {
+    __shared__ double patches[PATCHSIZE * N];
+
     int index = threadIdx.x + blockIdx.x * blockDim.x;
     int row = index / n;
     int col = index % n;
+
+    for (int i =- patchSize / 2; i <= patchSize / 2){
+        if( utils::isInBounds((i + row), col, n) ){
+            patches[col + (i + 1) * n] = image[col + (i + row) * n];
+        }
+         
+    }
 
     if (index >= n * n){
         return;

@@ -13,7 +13,7 @@ int main(int argc, char** argv)
 /* ------------------------------- parameters ------------------------------- */
 
     bool isCuda;
-    int n = 128;
+    int n = 256;
     int patchSize;
     float filterSigma;
     float patchSigma;
@@ -35,7 +35,7 @@ int main(int argc, char** argv)
 /* ------------------------------ file reading ------------------------------ */
 
     std::vector<float> image(n * n);
-    image = file::read("./data/in/noisy_flower.txt", n, n, ',');
+    image = file::read("./data/in/noisy_lena.txt", n, n, ',');
 
     std::cout << "Image read" << std::endl;
 
@@ -43,25 +43,25 @@ int main(int argc, char** argv)
 /*                             cpu image filtering                            */
 /* -------------------------------------------------------------------------- */
 
-    timer.start("CPU Filtering");
+    // timer.start("CPU Filtering");
 
-    std::vector<float> filteredImage = filterImage(image.data(), n, patchSize, patchSigma, filterSigma);
+    // std::vector<float> filteredImage = filterImage(image.data(), n, patchSize, patchSigma, filterSigma);
 
-    timer.stop();
+    // timer.stop();
 
-    isCuda = false;
+    // isCuda = false;
 
 /* -------------------------------------------------------------------------- */
 /*                             gpu image filtering                            */
 /* -------------------------------------------------------------------------- */
 
-    // timer.start("GPU Filtering");
+    timer.start("GPU Filtering");
 
-    // std::vector<float> filteredImage = cudaFilterImage(image.data(), n, patchSize, patchSigma, filterSigma);
+    std::vector<float> filteredImage = cudaFilterImage(image.data(), n, patchSize, patchSigma, filterSigma);
 
-    // timer.stop();
+    timer.stop();
 
-    // isCuda = true;
+    isCuda = true;
 
     std::cout   << "Image filtered: "   << std::endl
                 << "-Patch size "       << patchSize    << std::endl
