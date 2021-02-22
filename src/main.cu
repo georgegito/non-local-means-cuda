@@ -12,7 +12,7 @@ int main(int argc, char** argv)
 
 /* ------------------------------- parameters ------------------------------- */
 
-    bool isCuda = true;
+    bool isCuda = false;
     int n = 64;
     int patchSize;
     float filterSigma;
@@ -20,8 +20,8 @@ int main(int argc, char** argv)
 
     if (argc == 1) {
         patchSize = 5;
-        filterSigma = 0.06;
-        patchSigma = 0.8;
+        filterSigma = 0.02;
+        patchSigma = 5./3;
     }
     else if(argc == 4) {
         patchSize = atoi(argv[1]);
@@ -43,23 +43,21 @@ int main(int argc, char** argv)
 /*                             cpu image filtering                            */
 /* -------------------------------------------------------------------------- */
 
-    // timer.start("CPU Filtering");
+    timer.start("CPU Filtering");
 
-    // std::vector<float> cpuFilteredImage = filterImage(image.data(), n, patchSize, patchSigma, filterSigma);
+    std::vector<float> filteredImage = filterImage(image.data(), n, patchSize, patchSigma, filterSigma);
 
-    // timer.stop();
+    timer.stop();
 
 /* -------------------------------------------------------------------------- */
 /*                             gpu image filtering                            */
 /* -------------------------------------------------------------------------- */
 
-    timer.start("GPU Filtering");
+//     timer.start("GPU Filtering");
 
-    std::vector<float> filteredImage = cudaFilterImage(image.data(), n, patchSize, patchSigma, filterSigma);
+//     std::vector<float> filteredImage = cudaFilterImage(image.data(), n, patchSize, patchSigma, filterSigma);
 
-    timer.stop();
-
-    // prt::rowMajorVector(filteredImage, n, n);
+//     timer.stop();
 
     std::cout   << "Image filtered: "   << std::endl
                 << "-Patch size "       << patchSize    << std::endl

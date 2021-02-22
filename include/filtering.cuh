@@ -49,7 +49,8 @@ std::vector<float> filterImage( float * image,
                                  float filterSigma )
 {
     std::vector<float> res(n * n);
-    float * _weights = util::computeInsideWeights(patchSize, patchSigma).data();
+    std::vector<float> tempVec = util::computeInsideWeights(patchSize, patchSigma);
+    float * _weights = tempVec.data();
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {

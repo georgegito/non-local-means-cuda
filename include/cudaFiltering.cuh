@@ -66,8 +66,7 @@ float cudaFilterPixel( float * image,
                               patchRowStart,
                               patchColStart,
                               sigma,
-                              d_weights,
-                              d_temp );
+                              d_weights);
 
     cudaMemcpy(weights.data(), d_weights, size_image, cudaMemcpyDeviceToHost);
 
