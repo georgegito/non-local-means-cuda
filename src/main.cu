@@ -92,7 +92,7 @@ int main(int argc, char** argv)
     std::cout << "Filtered image written" << std::endl << std::endl;
     std::cout << "Residual written" << std::endl;
 
-/* -------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------- */
 
     std::cout << std::endl;
     return 0;
