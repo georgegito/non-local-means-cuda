@@ -43,7 +43,7 @@ __host__ __device__ bool isInBounds(int n, int x, int y)
 }
 
 // patch-to-patch euclidean distance
-__host__ __device__ float computePatchDistance( float * image, 
+float computePatchDistance( float * image, 
                              float * _weights, 
                              int n, 
                              int patchSize, 
@@ -65,7 +65,7 @@ __host__ __device__ float computePatchDistance( float * image,
     return ans;
 }
 
-__device__ int checkOverlay(float *image, 
+__device__ float checkOverlay(float *image, 
                             float *patches, 
                             int n,
                             int patchSize, 
