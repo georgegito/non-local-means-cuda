@@ -43,25 +43,25 @@ int main(int argc, char** argv)
 /*                             cpu image filtering                            */
 /* -------------------------------------------------------------------------- */
 
-    timer.start("CPU Filtering");
+    // timer.start("CPU Filtering");
 
-    std::vector<float> filteredImage = filterImage(image.data(), n, patchSize, patchSigma, filterSigma);
+    // std::vector<float> filteredImage = filterImage(image.data(), n, patchSize, patchSigma, filterSigma);
 
-    timer.stop();
+    // timer.stop();
 
-    isCuda = false;
+    // isCuda = false;
 
 /* -------------------------------------------------------------------------- */
 /*                             gpu image filtering                            */
 /* -------------------------------------------------------------------------- */
 
-    // timer.start("GPU Filtering");
+    timer.start("GPU Filtering");
 
-    // std::vector<float> filteredImage = cudaFilterImage(image.data(), n, patchSize, patchSigma, filterSigma);
+    std::vector<float> filteredImage = cudaFilterImage(image.data(), n, patchSize, patchSigma, filterSigma);
 
-    // timer.stop();
+    timer.stop();
 
-    // isCuda = true;
+    isCuda = true;
 
 /* ---------------------------- print parameters ---------------------------- */
 
