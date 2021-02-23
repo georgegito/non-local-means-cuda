@@ -14,7 +14,7 @@ float filterPixel( float * image,
     float res = 0;
     float sumW = 0;                    // sumW is the Z(i) of w(i, j) formula
     float dist;
-    std::vector<float> weights(n * n);
+    float w;
     int patchRowStart = pixelRow - patchSize / 2;
     int patchColStart = pixelCol - patchSize / 2;
 
@@ -28,16 +28,12 @@ float filterPixel( float * image,
                                                 patchColStart, 
                                                 i - patchSize / 2, 
                                                 j - patchSize / 2  );
-            weights[i * n + j] = util::computeWeight(dist, sigma);
-            sumW += weights[i * n + j];
+            w = util::computeWeight(dist, sigma);
+            sumW += w;
+            res += w * image[i * n + j];
         }
     }
-
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            res += (weights[i * n + j] / sumW) * image[i * n + j];
-        }
-    }
+    res = res / sumW;
 
     return res;
 }
@@ -49,8 +45,7 @@ std::vector<float> filterImage( float * image,
                                  float filterSigma )
 {
     std::vector<float> res(n * n);
-    std::vector<float> tempVec = util::computeInsideWeights(patchSize, patchSigma);
-    float * _weights = tempVec.data();
+    float * _weights = util::computeInsideWeights(patchSize, patchSigma);
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
