@@ -93,7 +93,6 @@ __device__ float cudaComputePatchDistance(  float * image,
                                             int p2_rowStart, 
                                             int p2_colStart ) 
 {
-
     float ans = 0;
 
     for (int i = 0; i < patchSize; i++) {
@@ -114,9 +113,9 @@ __host__ __device__ float computeWeight(float dist, float sigma) // compute weig
     return exp(-dist / pow(sigma, 2));
 }
 
-std::vector<float> computeInsideWeights(int patchSize, float patchSigma)
+float * computeInsideWeights(int patchSize, float patchSigma)
 {
-    std::vector<float > _weights(patchSize * patchSize);
+    float * _weights = new float[patchSize * patchSize];
     int centralPixelRow = patchSize / 2;
     int centralPixelCol = centralPixelRow;
     float _dist;
@@ -142,6 +141,17 @@ std::vector<float> computeInsideWeights(int patchSize, float patchSigma)
 } // namespace util
 
 namespace prt {
+
+void rowMajorArray(float * arr, int n, int m) 
+{
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            std::cout << arr[i * m + j] << "\t";
+        }
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
+}
 
 void rowMajorVector(std::vector<float> vector, int n, int m)
 {

@@ -120,8 +120,7 @@ std::vector<float> cudaFilterImage( float * image,
                                     float filterSigma )
 {
     std::vector<float> res(n * n);
-    std::vector<float> tempVec = util::computeInsideWeights(patchSize, patchSigma);
-    float * _weights = tempVec.data();
+    float * _weights = util::computeInsideWeights(patchSize, patchSigma);
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
