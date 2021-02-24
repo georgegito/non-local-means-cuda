@@ -71,16 +71,19 @@ int main(int argc, char** argv)
     std::string outPath = file::write_images(filteredImage, residual, patchSize, filterSigma, patchSigma , n, n, useGpu);
 
 /* ------------------------------- output test ------------------------------ */
+
+// works only for house image and parameters patchSize = 5, filterSigma = 0.06, patchSigma = 0.8 in cpu version
+
     if (!useGpu) {
         test::out(  "./data/standard/standard_5_0.06_0.8.txt", outPath, n  );
         test::out(  "./data/standard/standard_res_5_0.06_0.8.txt", 
                     "./data/out/residual_5_0.060000_0.800000.txt", n  ); 
     }
-    else {
-        test::out(  "./data/standard/cuda_standard_5_0.06_0.8.txt", outPath, n  );
-        test::out(  "./data/standard/cuda_standard_res_5_0.06_0.8.txt", 
-                    "./data/out/cuda_residual_5_0.060000_0.800000.txt", n  ); 
-    }
+    // else {
+    //     test::out(  "./data/standard/cuda_standard_5_0.06_0.8.txt", outPath, n  );
+    //     test::out(  "./data/standard/cuda_standard_res_5_0.06_0.8.txt", 
+    //                 "./data/out/cuda_residual_5_0.060000_0.800000.txt", n  ); 
+    // }
 
 /* ----------------------- compute mean squared error ----------------------- */
     
@@ -88,10 +91,10 @@ int main(int argc, char** argv)
     
     if (!useGpu)
         meanSquaredError = test::computeMeanSquaredError(   "./data/standard/house.txt", 
-                                                            "./data/out/filtered_image_5_0.060000_0.800000.txt", n   );
+                                                            outPath, n   );
     else
         meanSquaredError = test::computeMeanSquaredError(   "./data/standard/house.txt", 
-                                                            "./data/out/cuda_filtered_image_5_0.060000_0.800000.txt", n   );
+                                                            outPath , n   );
 
     std::cout << "Mean squared error = " << meanSquaredError << std::endl << std::endl;
 
