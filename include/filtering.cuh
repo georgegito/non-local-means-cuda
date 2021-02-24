@@ -3,6 +3,8 @@
 
 #include <utils.cuh>
 
+namespace cpu {
+
 float filterPixel( float * image, 
                    float * _weights, 
                    int n, 
@@ -55,5 +57,9 @@ std::vector<float> filterImage( float * image,
 
     return res;
 }
+
+} // namespace cpu
+
+
 
 #endif // __FILTERING_CUH__

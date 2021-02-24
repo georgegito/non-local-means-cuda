@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <filtering.cuh>
-#include <cudaFiltering.cuh>
+#include <cudaFilteringSharedMem.cuh>
 #include <cstdlib>
 #include <string> 
 
@@ -12,7 +12,7 @@ int main(int argc, char** argv)
 
 /* ------------------------------- parameters ------------------------------- */
 
-    bool isCuda;
+    bool useGpu = true;
     int n = 64;
     int patchSize;
     float filterSigma;
@@ -20,7 +20,7 @@ int main(int argc, char** argv)
 
     if (argc == 1) {
         patchSize = 5;
-        filterSigma = 0.04;
+        filterSigma = 0.06;
         patchSigma = 0.8;
     }
     else if(argc == 4) {
@@ -34,65 +34,71 @@ int main(int argc, char** argv)
 
 /* ------------------------------ file reading ------------------------------ */
 
-    std::vector<float> image(n * n);
-    image = file::read("./data/in/noisy_house.txt", n, n, ',');
-
+    std::vector<float> image = file::read("./data/in/noisy_house.txt", n, n, ',');
     std::cout << "Image read" << std::endl;
+    std::vector<float> filteredImage;
 
 /* -------------------------------------------------------------------------- */
 /*                             cpu image filtering                            */
 /* -------------------------------------------------------------------------- */
 
-    // timer.start("CPU Filtering");
-
-    // std::vector<float> filteredImage = filterImage(image.data(), n, patchSize, patchSigma, filterSigma);
-
-    // timer.stop();
-
-    // isCuda = false;
+    if (!useGpu) {
+        timer.start("CPU Filtering");
+        filteredImage = cpu::filterImage(image.data(), n, patchSize, patchSigma, filterSigma);
+        timer.stop();
+    }
 
 /* -------------------------------------------------------------------------- */
 /*                             gpu image filtering                            */
 /* -------------------------------------------------------------------------- */
 
-    timer.start("GPU Filtering");
-
-    std::vector<float> filteredImage = cudaFilterImage(image.data(), n, patchSize, patchSigma, filterSigma);
-
-    timer.stop();
-
-    isCuda = true;
+    if (useGpu) {
+        timer.start("GPU Filtering");
+        filteredImage = gpuSharedMem::filterImage(image.data(), n, patchSize, patchSigma, filterSigma);
+        timer.stop();
+    }
 
 /* ---------------------------- print parameters ---------------------------- */
 
-    std::cout   << "Image filtered: "   << std::endl
-                << "-Patch size "       << patchSize    << std::endl
-                << "-Patch sigma "      << patchSigma   << std::endl
-                << "-Filter Sigma "     << filterSigma  << std::endl  << std::endl;
+    prt::parameters(patchSize, filterSigma, patchSigma);
 
+/* ---------------------------- compute residual ---------------------------- */
 
-/* --------------------------- calculate residual --------------------------- */
-
-    std::vector<float> residual(n * n);
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            residual[i * n + j] = image[i * n + j] - filteredImage[i * n + j];
-        }
-    }
-    std::cout << "Residual calculated" << std::endl << std::endl;
+    std::vector<float> residual = util::computeResidual(image, filteredImage, n);
 
 /* ------------------------------ file writing ------------------------------ */
 
-    std::string params = std::to_string(patchSize)   + "_" + 
-                         std::to_string(filterSigma) + "_" + 
-                         std::to_string(patchSigma);
+    std::string outPath = file::write_images(filteredImage, residual, patchSize, filterSigma, patchSigma , n, n, useGpu);
 
-    file::write_images(filteredImage, residual, params, n, n, isCuda);
+/* ------------------------------- output test ------------------------------ */
 
-    std::cout << "Filtered image written" << std::endl << std::endl;
-    std::cout << "Residual written" << std::endl;
+// works only for house image and parameters patchSize = 5, filterSigma = 0.06, patchSigma = 0.8
 
-/* -------------------------------------------------------------------------- */
+    if (!useGpu) {
+        test::out(  "./data/standard/standard_5_0.06_0.8.txt", outPath, n  );
+        test::out(  "./data/standard/standard_res_5_0.06_0.8.txt", 
+                    "./data/out/residual_5_0.060000_0.800000.txt", n  ); 
+    }
+    else {
+        test::out(  "./data/standard/cuda_standard_5_0.06_0.8.txt", outPath, n  );
+        test::out(  "./data/standard/cuda_standard_res_5_0.06_0.8.txt", 
+                    "./data/out/cuda_residual_5_0.060000_0.800000.txt", n  ); 
+    }
+
+/* ----------------------- compute mean squared error ----------------------- */
+    
+    float meanSquaredError;
+    
+    if (!useGpu)
+        meanSquaredError = test::computeMeanSquaredError(   "./data/standard/house.txt", 
+                                                            outPath, n   );
+    else
+        meanSquaredError = test::computeMeanSquaredError(   "./data/standard/house.txt", 
+                                                            outPath , n   );
+
+    std::cout << "Mean squared error = " << meanSquaredError << std::endl << std::endl;
+
+/* --------------------------------------------------------------------------- */
 
     std::cout << std::endl;
     return 0;

@@ -41,3 +41,5 @@ for k=1:length(Files)
     colormap gray;
     drawnow
 end
+pause
+close all;
