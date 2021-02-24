@@ -62,23 +62,38 @@ int main(int argc, char** argv)
 
     prt::parameters(patchSize, filterSigma, patchSigma);
 
-/* --------------------------- calculate residual --------------------------- */
+/* ---------------------------- compute residual ---------------------------- */
 
     std::vector<float> residual = util::computeResidual(image, filteredImage, n);
 
 /* ------------------------------ file writing ------------------------------ */
 
-    file::write_images(filteredImage, residual, patchSize, filterSigma, patchSigma , n, n, useGpu);
+    std::string outPath = file::write_images(filteredImage, residual, patchSize, filterSigma, patchSigma , n, n, useGpu);
 
 /* ------------------------------- output test ------------------------------ */
     if (!useGpu) {
-        test::out("./data/out/standard_5_0.06_0.8.txt", "./data/out/filtered_image_5_0.060000_0.800000.txt", n);
-        test::out("./data/out/standard_res_5_0.06_0.8.txt", "./data/out/residual_5_0.060000_0.800000.txt", n); 
+        test::out(  "./data/standard/standard_5_0.06_0.8.txt", outPath, n  );
+        test::out(  "./data/standard/standard_res_5_0.06_0.8.txt", 
+                    "./data/out/residual_5_0.060000_0.800000.txt", n  ); 
     }
     else {
-        test::out("./data/out/cuda_standard_5_0.06_0.8.txt", "./data/out/cuda_filtered_image_5_0.060000_0.800000.txt", n);
-        test::out("./data/out/cuda_standard_res_5_0.06_0.8.txt", "./data/out/cuda_residual_5_0.060000_0.800000.txt", n); 
+        test::out(  "./data/standard/cuda_standard_5_0.06_0.8.txt", outPath, n  );
+        test::out(  "./data/standard/cuda_standard_res_5_0.06_0.8.txt", 
+                    "./data/out/cuda_residual_5_0.060000_0.800000.txt", n  ); 
     }
+
+/* ----------------------- compute mean squared error ----------------------- */
+    
+    float meanSquaredError;
+    
+    if (!useGpu)
+        meanSquaredError = test::computeMeanSquaredError(   "./data/standard/house.txt", 
+                                                            "./data/out/filtered_image_5_0.060000_0.800000.txt", n   );
+    else
+        meanSquaredError = test::computeMeanSquaredError(   "./data/standard/house.txt", 
+                                                            "./data/out/cuda_filtered_image_5_0.060000_0.800000.txt", n   );
+
+    std::cout << "Mean squared error = " << meanSquaredError << std::endl << std::endl;
 
 /* --------------------------------------------------------------------------- */
 

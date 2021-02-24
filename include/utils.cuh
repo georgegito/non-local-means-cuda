@@ -209,7 +209,7 @@ std::vector<float> read(std::string filePath, int n, int m, char delim)
     return image;
 }
 
-void write(std::vector<float> image, std::string fileName, int rowNum, int colNum)
+std::string write(std::vector<float> image, std::string fileName, int rowNum, int colNum)
 {
     std::vector<std::string> out;
 
@@ -223,9 +223,11 @@ void write(std::vector<float> image, std::string fileName, int rowNum, int colNu
     std::ofstream output_file("./data/out/" + fileName + ".txt");
     std::ostream_iterator<std::string> output_iterator(output_file, "");
     std::copy(out.begin(), out.end(), output_iterator);
+
+    return "./data/out/" + fileName + ".txt";
 }
 
-void write_images(  std::vector<float> filteredImage, 
+std::string write_images(  std::vector<float> filteredImage, 
                     std::vector<float > residual, 
                     int patchSize, 
                     float filterSigma, 
@@ -234,6 +236,7 @@ void write_images(  std::vector<float> filteredImage,
                     int colNum, 
                     bool useGpu  )
 {
+    std::string ret;
     std::string params = std::to_string(patchSize)   + "_" + 
     std::to_string(filterSigma) + "_" + 
     std::to_string(patchSigma);
@@ -242,7 +245,7 @@ void write_images(  std::vector<float> filteredImage,
     if (useGpu) {
         filteredName = "cuda_" + filteredName;
     }
-    file::write(filteredImage, filteredName, rowNum, colNum);
+    ret = file::write(filteredImage, filteredName, rowNum, colNum);
 
     std::string resName = "residual_" + params;
     if (useGpu) {
@@ -252,6 +255,8 @@ void write_images(  std::vector<float> filteredImage,
 
     std::cout << "Filtered image written" << std::endl << std::endl;
     std::cout << "Residual written" << std::endl << std::endl;
+
+    return ret;
 }
 
 } // namespace file
@@ -279,6 +284,21 @@ void out(std::string standOutPath, std::string outPath, int n)
         std::cout << "Correct output - Test passed" << std::endl << std::endl;
     else
         std::cout << "Wrong output- Test failed" << std::endl << std::endl;
+}
+
+float computeMeanSquaredError(std::string originalOutPath, std::string outPath, int n)
+{
+    std::vector<float> originalOut = file::read(originalOutPath, n, n, ',');
+    std::vector<float> out = file::read(outPath, n, n, ',');
+    float res = 0;
+
+    for (int i = 0; i < n * n; i ++) {
+        res += pow(originalOut[i] - out[i], 2);
+    }
+    
+    res = res / (n * n);
+
+    return res;
 }
 
 } // namespace test
