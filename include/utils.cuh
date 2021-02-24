@@ -12,6 +12,10 @@
 
 namespace util {
 
+/* -------------------------------------------------------------------------- */
+/*                                    timer                                   */
+/* -------------------------------------------------------------------------- */
+
 class Timer {
   public:
     Timer(bool print) : print(print) {}
@@ -37,20 +41,33 @@ class Timer {
     std::chrono::high_resolution_clock::time_point t1, t2;
 };
 
+/* -------------------------------------------------------------------------- */
+/*                             host & device utils                            */
+/* -------------------------------------------------------------------------- */
+
 __host__ __device__ bool isInBounds(int n, int x, int y) 
 {
     return x >= 0 && x < n && y >= 0 && y < n;
 }
 
+__host__ __device__ float computeWeight(float dist, float sigma) // compute weight without "/z(i)" division
+{
+    return exp(-dist / pow(sigma, 2));
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                 host utils                                 */
+/* -------------------------------------------------------------------------- */
+
 // patch-to-patch euclidean distance
 float computePatchDistance( float * image, 
-                             float * _weights, 
-                             int n, 
-                             int patchSize, 
-                             int p1_rowStart, 
-                             int p1_colStart, 
-                             int p2_rowStart, 
-                             int p2_colStart ) 
+                            float * _weights, 
+                            int n, 
+                            int patchSize, 
+                            int p1_rowStart, 
+                            int p1_colStart, 
+                            int p2_rowStart, 
+                            int p2_colStart ) 
 {
     float ans = 0;
 
@@ -63,54 +80,6 @@ float computePatchDistance( float * image,
     }
 
     return ans;
-}
-
-__device__ float checkOverlay(float *image, 
-                            float *patches, 
-                            int n,
-                            int patchSize, 
-                            int patchesRowStart, 
-                            int row, 
-                            int col)
-{
-    for (int i = 0; i < patchSize; i++){
-        if (row == patchesRowStart + i){
-            return patches[i * n + col];
-        }
-    }
-    
-    return image[row * n + col];
-}
-
-// patch-to-patch euclidean distance
-__device__ float cudaComputePatchDistance(  float * image, 
-                                            float * _weights, 
-                                            int n, 
-                                            int patchSize, 
-                                            int p1_rowStart, 
-                                            int p1_colStart, 
-                                            float *patches,
-                                            int p2_rowStart, 
-                                            int p2_colStart ) 
-{
-    float ans = 0;
-
-    for (int i = 0; i < patchSize; i++) {
-        for (int j = 0; j < patchSize; j++) {
-            if (isInBounds(n, p1_rowStart + i, p1_colStart + j) && isInBounds(n, p2_rowStart + i, p2_colStart + j)) {
-                ans += _weights[i * patchSize + j] * 
-                        pow((patches[i * n + p1_colStart + j] - 
-                            checkOverlay(image, patches, n, patchSize, p1_rowStart, p2_rowStart + i, p2_colStart + j)), 2);
-            }
-        }
-    }
-
-    return ans;
-}
-
-__host__ __device__ float computeWeight(float dist, float sigma) // compute weight without "/z(i)" division
-{
-    return exp(-dist / pow(sigma, 2));
 }
 
 float * computeInsideWeights(int patchSize, float patchSigma)
@@ -149,6 +118,53 @@ std::vector<float> computeResidual(std::vector<float> image, std::vector<float> 
     std::cout << "Residual calculated" << std::endl << std::endl;
 
     return res;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                device utils                                */
+/* -------------------------------------------------------------------------- */
+
+__device__ float checkOverlay(  float *image, 
+                                float *patches, 
+                                int n,
+                                int patchSize, 
+                                int patchesRowStart, 
+                                int row, 
+                                int col  )
+{
+    for (int i = 0; i < patchSize; i++) {
+        if (row == patchesRowStart + i) {
+            return patches[i * n + col];
+        }
+    }
+
+    return image[row * n + col];
+}
+
+// patch-to-patch euclidean distance
+__device__ float cudaComputePatchDistance(  float * image, 
+                                            float * _weights, 
+                                            int n, 
+                                            int patchSize, 
+                                            int p1_rowStart, 
+                                            int p1_colStart, 
+                                            float *patches,
+                                            int p2_rowStart, 
+                                            int p2_colStart ) 
+{
+    float ans = 0;
+
+    for (int i = 0; i < patchSize; i++) {
+        for (int j = 0; j < patchSize; j++) {
+            if (isInBounds(n, p1_rowStart + i, p1_colStart + j) && isInBounds(n, p2_rowStart + i, p2_colStart + j)) {
+                ans += _weights[i * patchSize + j] * 
+                pow((patches[i * n + p1_colStart + j] - 
+                checkOverlay(image, patches, n, patchSize, p1_rowStart, p2_rowStart + i, p2_colStart + j)), 2);
+            }
+        }
+    }
+
+    return ans;
 }
 
 } // namespace util
@@ -283,7 +299,7 @@ void out(std::string standOutPath, std::string outPath, int n)
     if (standOut == out)
         std::cout << "Correct output - Test passed" << std::endl << std::endl;
     else
-        std::cout << "Wrong output- Test failed" << std::endl << std::endl;
+        std::cout << "Wrong output - Test failed" << std::endl << std::endl;
 }
 
 float computeMeanSquaredError(std::string originalOutPath, std::string outPath, int n)
