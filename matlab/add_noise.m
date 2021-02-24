@@ -1,6 +1,6 @@
 clc; clear;
 
-I = imread('../data/images/lena.jpg');
+I = imread('../data/images/house.jpg');
 J = imnoise (I, 'gaussian');
 figure();
 imshow(I);

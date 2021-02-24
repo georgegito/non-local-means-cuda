@@ -138,6 +138,19 @@ float * computeInsideWeights(int patchSize, float patchSigma)
     return _weights;
 }
 
+std::vector<float> computeResidual(std::vector<float> image, std::vector<float> filteredImage, int n)
+{
+    std::vector<float> res(n * n);
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            res[i * n + j] = image[i * n + j] - filteredImage[i * n + j];
+        }
+    }
+    std::cout << "Residual calculated" << std::endl << std::endl;
+
+    return res;
+}
+
 } // namespace util
 
 namespace prt {
@@ -162,6 +175,14 @@ void rowMajorVector(std::vector<float> vector, int n, int m)
         std::cout << std::endl;
     }
     std::cout << std::endl;
+}
+
+void parameters(int patchSize, float filterSigma, float patchSigma)
+{
+    std::cout   << "Image filtered: "   << std::endl
+                << "-Patch size "       << patchSize    << std::endl
+                << "-Patch sigma "      << patchSigma   << std::endl
+                << "-Filter Sigma "     << filterSigma  << std::endl  << std::endl;
 }
 
 } // namespace prt
@@ -204,19 +225,33 @@ void write(std::vector<float> image, std::string fileName, int rowNum, int colNu
     std::copy(out.begin(), out.end(), output_iterator);
 }
 
-void write_images(std::vector<float > filteredImage, std::vector<float > residual, std::string params, int rowNum, int colNum, bool isCuda)
-{                            
+void write_images(  std::vector<float> filteredImage, 
+                    std::vector<float > residual, 
+                    int patchSize, 
+                    float filterSigma, 
+                    float patchSigma, 
+                    int rowNum, 
+                    int colNum, 
+                    bool useGpu  )
+{
+    std::string params = std::to_string(patchSize)   + "_" + 
+    std::to_string(filterSigma) + "_" + 
+    std::to_string(patchSigma);
+
     std::string filteredName = "filtered_image_" + params;       
-    if (isCuda) {
+    if (useGpu) {
         filteredName = "cuda_" + filteredName;
     }
     file::write(filteredImage, filteredName, rowNum, colNum);
 
     std::string resName = "residual_" + params;
-    if (isCuda) {
+    if (useGpu) {
         resName = "cuda_" + resName;
     }
     file::write(residual, resName, rowNum, colNum);
+
+    std::cout << "Filtered image written" << std::endl << std::endl;
+    std::cout << "Residual written" << std::endl << std::endl;
 }
 
 } // namespace file
@@ -233,6 +268,17 @@ bool mat(std::vector<float> mat_1, std::vector<float> mat_2, int n)
         }
     }
     return true;
+}
+
+void out(std::string standOutPath, std::string outPath, int n)
+{
+    std::vector<float> standOut = file::read(standOutPath, n, n, ',');
+    std::vector<float> out = file::read(outPath, n, n, ',');
+
+    if (standOut == out)
+        std::cout << "Correct output - Test passed" << std::endl << std::endl;
+    else
+        std::cout << "Wrong output- Test failed" << std::endl << std::endl;
 }
 
 } // namespace test
