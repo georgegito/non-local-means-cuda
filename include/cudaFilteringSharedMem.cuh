@@ -1,9 +1,11 @@
-#ifndef __CUDAFILTERING_CUH__
-#define __CUDAFILTERING_CUH__
+#ifndef __CUDAFILTERINGSHAREDMEM_CUH__
+#define __CUDAFILTERINGSHAREDMEM_CUH__
 
 #include <utils.cuh>
 
-__global__ void cudaFilterPixel(float * image, 
+namespace gpuSharedMem {
+
+__global__ void filterPixel(float * image, 
                                 float * _weights, 
                                 int n, 
                                 int patchSize, 
@@ -39,14 +41,14 @@ __global__ void cudaFilterPixel(float * image,
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             dist = util::cudaComputePatchDistance(  image,  
-                                                _weights, 
-                                                n, 
-                                                patchSize, 
-                                                patchRowStart, 
-                                                patchColStart, 
-                                                patches,
-                                                i - patchSize / 2, 
-                                                j - patchSize / 2  );
+                                                    _weights, 
+                                                    n, 
+                                                    patchSize, 
+                                                    patchRowStart, 
+                                                    patchColStart, 
+                                                    patches,
+                                                    i - patchSize / 2, 
+                                                    j - patchSize / 2  );
             w = util::computeWeight(dist, sigma);
             sumW += w;
             res += w * image[i * n + j];
@@ -57,11 +59,11 @@ __global__ void cudaFilterPixel(float * image,
     filteredImage[index] = res;
     }
 
-std::vector<float> cudaFilterImage( float * image, 
-                                int n, 
-                                int patchSize,  
-                                float patchSigma,
-                                float filterSigma )
+std::vector<float> filterImage( float * image, 
+                                    int n, 
+                                    int patchSize,  
+                                    float patchSigma,
+                                    float filterSigma )
 {
     std::vector<float> res(n * n);
     float * _weights = util::computeInsideWeights(patchSize, patchSigma);
@@ -79,7 +81,7 @@ std::vector<float> cudaFilterImage( float * image,
     cudaMemcpy(d_image, image, size_image, cudaMemcpyHostToDevice);
     cudaMemcpy(d_weights, _weights, size_weights, cudaMemcpyHostToDevice);
 
-    cudaFilterPixel<<<n,n, size_shared_memory>>>(d_image, d_weights, n, patchSize, filterSigma, d_res);
+    filterPixel<<<n,n, size_shared_memory>>>(d_image, d_weights, n, patchSize, filterSigma, d_res);
     
     cudaMemcpy(res.data(), d_res, size_image, cudaMemcpyDeviceToHost);
 
@@ -90,4 +92,6 @@ std::vector<float> cudaFilterImage( float * image,
     return res;
 }
 
-#endif // __FILTERING_CUH__
+} // namespace gpuSharedMem
+
+#endif // __CUDAFILTERINGSHAREDMEM_CUH__

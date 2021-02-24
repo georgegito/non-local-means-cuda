@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <filtering.cuh>
-#include <cudaFiltering.cuh>
+#include <cudaFilteringSharedMem.cuh>
 #include <cstdlib>
 #include <string> 
 
@@ -44,7 +44,7 @@ int main(int argc, char** argv)
 
     if (!useGpu) {
         timer.start("CPU Filtering");
-        filteredImage = filterImage(image.data(), n, patchSize, patchSigma, filterSigma);
+        filteredImage = cpu::filterImage(image.data(), n, patchSize, patchSigma, filterSigma);
         timer.stop();
     }
 
@@ -54,7 +54,7 @@ int main(int argc, char** argv)
 
     if (useGpu) {
         timer.start("GPU Filtering");
-        filteredImage = cudaFilterImage(image.data(), n, patchSize, patchSigma, filterSigma);
+        filteredImage = gpuSharedMem::filterImage(image.data(), n, patchSize, patchSigma, filterSigma);
         timer.stop();
     }
 
