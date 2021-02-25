@@ -20,7 +20,8 @@ useGpu=1
 useSharedMem=1
 
 #compile
-nvcc -o build/main -I./include src/main.cu -O3
+mkdir -p build
+mkdir -lude src/main.cu -O3
 
 for i in ${filterSigma[@]}; do
     for j in ${patchSigma[@]}; do
