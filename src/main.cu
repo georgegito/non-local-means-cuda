@@ -13,7 +13,8 @@ int main(int argc, char** argv)
 
 /* ------------------------------- parameters ------------------------------- */
 
-    bool useGpu = false;
+    bool useGpu = true;
+    bool useSharedMem = true;
     int n = 64;
     int patchSize;
     float filterSigma;
@@ -44,7 +45,7 @@ int main(int argc, char** argv)
 /* -------------------------------------------------------------------------- */
 
     if (!useGpu) {
-        timer.start("CPU Filtering");
+        timer.start("CPU filtering");
         filteredImage = cpu::filterImage(image.data(), n, patchSize, patchSigma, filterSigma);
         timer.stop();
     }
@@ -54,9 +55,16 @@ int main(int argc, char** argv)
 /* -------------------------------------------------------------------------- */
 
     if (useGpu) {
-        timer.start("GPU Filtering");
-        filteredImage = gpuSharedMem::filterImage(image.data(), n, patchSize, patchSigma, filterSigma);
-        timer.stop();
+        if (!useSharedMem) {
+            timer.start("GPU filtering (global memory)");
+            filteredImage = gpuGlobalMem::filterImage(image.data(), n, patchSize, patchSigma, filterSigma);
+            timer.stop();
+        }
+        else {
+            timer.start("GPU filtering (shared memory)");
+            filteredImage = gpuSharedMem::filterImage(image.data(), n, patchSize, patchSigma, filterSigma);
+            timer.stop();
+        }
     }
 
 /* ---------------------------- print parameters ---------------------------- */
