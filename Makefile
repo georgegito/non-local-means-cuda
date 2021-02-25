@@ -24,7 +24,7 @@ compile:
 
 run:
 	@printf "\n** Testing\n\n"
-	./build/main 5 0.06 0.8 0 0
+	./build/main 0 5 0.06 0.8 0 0
 
 
 run_all:
