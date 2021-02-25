@@ -52,7 +52,8 @@ __host__ __device__ bool isInBounds(int n, int x, int y)
 
 __host__ __device__ float computeWeight(float dist, float sigma) // compute weight without "/z(i)" division
 {
-    return exp(-dist / pow(sigma, 2));
+    // return exp(-dist / pow(sigma, 2));
+    return exp(-dist / (sigma * sigma));
 }
 
 // patch-to-patch euclidean distance
@@ -70,7 +71,11 @@ __host__ __device__ float computePatchDistance( float * image,
     for (int i = 0; i < patchSize; i++) {
         for (int j = 0; j < patchSize; j++) {
             if (isInBounds(n, p1_rowStart + i, p1_colStart + j) && isInBounds(n, p2_rowStart + i, p2_colStart + j)) {
-                ans += _weights[i * patchSize + j] * pow((image[(p1_rowStart + i) * n + p1_colStart + j] - image[(p2_rowStart + i) * n + p2_colStart + j]), 2);
+                // ans += _weights[i * patchSize + j] * pow((image[(p1_rowStart + i) * n + p1_colStart + j] - image[(p2_rowStart + i) * n + p2_colStart + j]), 2);
+                // TODO use temp to avoid mutliple accesses in global memory
+                ans +=  _weights[i * patchSize + j] *
+                        (image[(p1_rowStart + i) * n + p1_colStart + j] - image[(p2_rowStart + i) * n + p2_colStart + j]) * 
+                        (image[(p1_rowStart + i) * n + p1_colStart + j] - image[(p2_rowStart + i) * n + p2_colStart + j]);
             }
         }
     }
@@ -92,8 +97,11 @@ float * computeInsideWeights(int patchSize, float patchSigma)
 
     for (int i = 0; i < patchSize; i++) {
         for (int j = 0; j < patchSize; j++) {
-            _dist = pow(centralPixelRow - i, 2) + pow(centralPixelCol - j, 2);
-            _weights[i * patchSize + j] = exp(-_dist / (2 * pow(patchSigma, 2)));
+            // _dist = pow(centralPixelRow - i, 2) + pow(centralPixelCol - j, 2);
+            _dist = (centralPixelRow - i) * (centralPixelRow - i) +
+                    (centralPixelCol - j) * (centralPixelCol - j);
+            // _weights[i * patchSize + j] = exp(-_dist / (2 * pow(patchSigma, 2)));
+            _weights[i * patchSize + j] = exp(-_dist / (2 * (patchSigma * patchSigma)));
             _sumW += _weights[i * patchSize + j];
         }
     }
@@ -153,13 +161,16 @@ __device__ float cudaComputePatchDistance(  float * image,
                                             int p2_colStart ) 
 {
     float ans = 0;
+    float temp;
 
     for (int i = 0; i < patchSize; i++) {
         for (int j = 0; j < patchSize; j++) {
             if (isInBounds(n, p1_rowStart + i, p1_colStart + j) && isInBounds(n, p2_rowStart + i, p2_colStart + j)) {
-                ans += _weights[i * patchSize + j] * 
-                pow((patches[i * n + p1_colStart + j] - 
-                checkOverlay(image, patches, n, patchSize, p1_rowStart, p2_rowStart + i, p2_colStart + j)), 2);
+                temp =  (patches[i * n + p1_colStart + j] - 
+                        checkOverlay(image, patches, n, patchSize, p1_rowStart, p2_rowStart + i, p2_colStart + j));
+                ans += _weights[i * patchSize + j] * temp * temp;
+                // pow((patches[i * n + p1_colStart + j] - 
+                // checkOverlay(image, patches, n, patchSize, p1_rowStart, p2_rowStart + i, p2_colStart + j)), 2);
             }
         }
     }
@@ -295,6 +306,13 @@ void out(std::string standOutPath, std::string outPath, int n)
 {
     std::vector<float> standOut = file::read(standOutPath, n, n, ',');
     std::vector<float> out = file::read(outPath, n, n, ',');
+
+    // for (int i = 0; i < n * n; i++) {
+    //     if (standOut[i] != out[i]) {
+    //         std::cout << standOut[i] << "\t" << out[i] << std::endl;
+    //         std::cout << i << std::endl;
+    //     }
+    // }
 
     if (standOut == out)
         std::cout << "Correct output - Test passed" << std::endl << std::endl;
