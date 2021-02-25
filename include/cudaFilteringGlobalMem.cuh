@@ -28,6 +28,8 @@ __global__ void filterPixel(float * image,
     int patchRowStart = pixelRow - patchSize / 2;
     int patchColStart = pixelCol - patchSize / 2;
 
+    __syncthreads();
+
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             dist = util::computePatchDistance(  image,  
