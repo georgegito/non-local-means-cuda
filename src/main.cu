@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <filtering.cuh>
+#include <cudaFilteringGlobalMem.cuh>
 #include <cudaFilteringSharedMem.cuh>
 #include <cstdlib>
 #include <string> 
@@ -12,7 +13,7 @@ int main(int argc, char** argv)
 
 /* ------------------------------- parameters ------------------------------- */
 
-    bool useGpu = true;
+    bool useGpu = false;
     int n = 64;
     int patchSize;
     float filterSigma;
@@ -87,16 +88,16 @@ int main(int argc, char** argv)
 
 /* ----------------------- compute mean squared error ----------------------- */
     
-    float meanSquaredError;
+    // float meanSquaredError;
     
-    if (!useGpu)
-        meanSquaredError = test::computeMeanSquaredError(   "./data/standard/house.txt", 
-                                                            outPath, n   );
-    else
-        meanSquaredError = test::computeMeanSquaredError(   "./data/standard/house.txt", 
-                                                            outPath , n   );
+    // if (!useGpu)
+    //     meanSquaredError = test::computeMeanSquaredError(   "./data/standard/house.txt", 
+    //                                                         outPath, n   );
+    // else
+    //     meanSquaredError = test::computeMeanSquaredError(   "./data/standard/house.txt", 
+    //                                                         outPath , n   );
 
-    std::cout << "Mean squared error = " << meanSquaredError << std::endl << std::endl;
+    // std::cout << "Mean squared error = " << meanSquaredError << std::endl << std::endl;
 
 /* --------------------------------------------------------------------------- */
 

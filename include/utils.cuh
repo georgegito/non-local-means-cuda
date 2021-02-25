@@ -55,19 +55,15 @@ __host__ __device__ float computeWeight(float dist, float sigma) // compute weig
     return exp(-dist / pow(sigma, 2));
 }
 
-/* -------------------------------------------------------------------------- */
-/*                                 host utils                                 */
-/* -------------------------------------------------------------------------- */
-
 // patch-to-patch euclidean distance
-float computePatchDistance( float * image, 
-                            float * _weights, 
-                            int n, 
-                            int patchSize, 
-                            int p1_rowStart, 
-                            int p1_colStart, 
-                            int p2_rowStart, 
-                            int p2_colStart ) 
+__host__ __device__ float computePatchDistance( float * image, 
+                                                float * _weights, 
+                                                int n, 
+                                                int patchSize, 
+                                                int p1_rowStart, 
+                                                int p1_colStart, 
+                                                int p2_rowStart, 
+                                                int p2_colStart ) 
 {
     float ans = 0;
 
@@ -81,6 +77,10 @@ float computePatchDistance( float * image,
 
     return ans;
 }
+
+/* -------------------------------------------------------------------------- */
+/*                                 host utils                                 */
+/* -------------------------------------------------------------------------- */
 
 float * computeInsideWeights(int patchSize, float patchSigma)
 {
