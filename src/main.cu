@@ -13,22 +13,26 @@ int main(int argc, char** argv)
 
 /* ------------------------------- parameters ------------------------------- */
 
-    bool useGpu = false;
-    bool useSharedMem = false;
     int n = 64;
     int patchSize;
     float filterSigma;
     float patchSigma;
+    bool useGpu;
+    bool useSharedMem;
 
     if (argc == 1) {
         patchSize = 5;
         filterSigma = 0.06;
         patchSigma = 0.8;
+        useGpu = false;
+        useSharedMem = false;
     }
-    else if(argc == 4) {
+    else if(argc == 6) {
         patchSize = atoi(argv[1]);
         filterSigma = atof(argv[2]);
         patchSigma = atof(argv[3]);
+        useGpu = atoi(argv[4]);
+        useSharedMem = atoi(argv[5]);
     }
     else {
         return 1;
@@ -81,18 +85,18 @@ int main(int argc, char** argv)
 
 /* ------------------------------- output test ------------------------------ */
 
-// // works only for house image and parameters patchSize = 5, filterSigma = 0.06, patchSigma = 0.8
+// works only for house image and parameters patchSize = 5, filterSigma = 0.06, patchSigma = 0.8
 
-//     if (!useGpu) {
-//         test::out(  "./data/standard/standard_5_0.06_0.8.txt", outPath, n  );
-//         test::out(  "./data/standard/standard_res_5_0.06_0.8.txt", 
-//                     "./data/out/residual_5_0.060000_0.800000.txt", n  ); 
-//     }
-//     else {
-//         test::out(  "./data/standard/cuda_standard_5_0.06_0.8.txt", outPath, n  );
-//         test::out(  "./data/standard/cuda_standard_res_5_0.06_0.8.txt", 
-//                     "./data/out/cuda_residual_5_0.060000_0.800000.txt", n  ); 
-//     }
+    if (!useGpu) {
+        test::out(  "./data/standard/standard_5_0.06_0.8.txt", outPath, n  );
+        test::out(  "./data/standard/standard_res_5_0.06_0.8.txt", 
+                    "./data/out/residual_5_0.060000_0.800000.txt", n  ); 
+    }
+    else {
+        test::out(  "./data/standard/cuda_standard_5_0.06_0.8.txt", outPath, n  );
+        test::out(  "./data/standard/cuda_standard_res_5_0.06_0.8.txt", 
+                    "./data/out/cuda_residual_5_0.060000_0.800000.txt", n  ); 
+    }
 
 /* ----------------------- compute mean squared error ----------------------- */
     
