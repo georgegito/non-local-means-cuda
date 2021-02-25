@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <filtering.cuh>
+#include <cudaFilteringGlobalMem.cuh>
 #include <cudaFilteringSharedMem.cuh>
 #include <cstdlib>
 #include <string> 
@@ -13,6 +14,7 @@ int main(int argc, char** argv)
 /* ------------------------------- parameters ------------------------------- */
 
     bool useGpu = true;
+    bool useSharedMem = true;
     int n = 64;
     int patchSize;
     float filterSigma;
@@ -43,7 +45,7 @@ int main(int argc, char** argv)
 /* -------------------------------------------------------------------------- */
 
     if (!useGpu) {
-        timer.start("CPU Filtering");
+        timer.start("CPU filtering");
         filteredImage = cpu::filterImage(image.data(), n, patchSize, patchSigma, filterSigma);
         timer.stop();
     }
@@ -53,9 +55,16 @@ int main(int argc, char** argv)
 /* -------------------------------------------------------------------------- */
 
     if (useGpu) {
-        timer.start("GPU Filtering");
-        filteredImage = gpuSharedMem::filterImage(image.data(), n, patchSize, patchSigma, filterSigma);
-        timer.stop();
+        if (!useSharedMem) {
+            timer.start("GPU filtering (global memory)");
+            filteredImage = gpuGlobalMem::filterImage(image.data(), n, patchSize, patchSigma, filterSigma);
+            timer.stop();
+        }
+        else {
+            timer.start("GPU filtering (shared memory)");
+            filteredImage = gpuSharedMem::filterImage(image.data(), n, patchSize, patchSigma, filterSigma);
+            timer.stop();
+        }
     }
 
 /* ---------------------------- print parameters ---------------------------- */
@@ -87,16 +96,16 @@ int main(int argc, char** argv)
 
 /* ----------------------- compute mean squared error ----------------------- */
     
-    float meanSquaredError;
+    // float meanSquaredError;
     
-    if (!useGpu)
-        meanSquaredError = test::computeMeanSquaredError(   "./data/standard/house.txt", 
-                                                            outPath, n   );
-    else
-        meanSquaredError = test::computeMeanSquaredError(   "./data/standard/house.txt", 
-                                                            outPath , n   );
+    // if (!useGpu)
+    //     meanSquaredError = test::computeMeanSquaredError(   "./data/standard/house.txt", 
+    //                                                         outPath, n   );
+    // else
+    //     meanSquaredError = test::computeMeanSquaredError(   "./data/standard/house.txt", 
+    //                                                         outPath , n   );
 
-    std::cout << "Mean squared error = " << meanSquaredError << std::endl << std::endl;
+    // std::cout << "Mean squared error = " << meanSquaredError << std::endl << std::endl;
 
 /* --------------------------------------------------------------------------- */
 

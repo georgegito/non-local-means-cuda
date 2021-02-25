@@ -6,11 +6,11 @@
 namespace gpuSharedMem {
 
 __global__ void filterPixel(float * image, 
-                                float * _weights, 
-                                int n, 
-                                int patchSize, 
-                                float sigma,
-                                float *filteredImage)
+                            float * _weights, 
+                            int n, 
+                            int patchSize, 
+                            float sigma,
+                            float *filteredImage)
 {
     int index = threadIdx.x + blockIdx.x * blockDim.x;
     
