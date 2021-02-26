@@ -10,14 +10,14 @@ module load cuda
 nvidia-smi
 
 #imageNum={house:0, flower:1, lena:2}
-imageNum=1
+imageNum=0
 
 #parameters
-patchSize=5
-filterSigma=(0.04 0.06 0.08 0.1 0.12 0.14)
-patchSigma=(0.4 0.6 0.8 1 1.2 1.4)
-useGpu=1
-useSharedMem=1
+patchSize=3
+filterSigma=(0.01 0.05 0.1)
+patchSigma=(0.8)
+useGpu=0
+useSharedMem=0
 
 #make build dir
 mkdir -p build
