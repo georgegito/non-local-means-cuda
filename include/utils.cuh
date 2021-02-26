@@ -307,12 +307,11 @@ void out(std::string standOutPath, std::string outPath, int n)
     std::vector<float> standOut = file::read(standOutPath, n, n, ',');
     std::vector<float> out = file::read(outPath, n, n, ',');
 
-    // for (int i = 0; i < n * n; i++) {
-    //     if (standOut[i] != out[i]) {
-    //         std::cout << standOut[i] << "\t" << out[i] << std::endl;
-    //         std::cout << i << std::endl;
-    //     }
-    // }
+    for (int i = 0; i < n * n; i++) {
+        if (standOut[i] != out[i]) {
+            std::cout << "Error:\t" << standOut[i] << "\t" << out[i] << std::endl;
+        }
+    }
 
     if (standOut == out)
         std::cout << "Correct output - Test passed" << std::endl << std::endl;
