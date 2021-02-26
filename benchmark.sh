@@ -19,9 +19,11 @@ patchSigma=(0.4 0.6 0.8 1 1.2 1.4)
 useGpu=1
 useSharedMem=1
 
-#compile
+#make build dir
 mkdir -p build
-mkdir -lude src/main.cu -O3
+
+#compile
+nvcc -o build/main -I./include src/main.cu -O3
 
 for i in ${filterSigma[@]}; do
     for j in ${patchSigma[@]}; do
