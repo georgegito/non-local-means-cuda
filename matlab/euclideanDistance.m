@@ -8,4 +8,4 @@ for i = 1 : 1 : length(X) * length(X)
     dist = dist + (X(i) - Y(i))^2;
 end
 
-dist = sqrt(dist)
+dist
