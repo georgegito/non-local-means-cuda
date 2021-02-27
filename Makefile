@@ -5,7 +5,7 @@ CFLAGS= -O3
 BUILD_DIR=build
 SRC_DIR=src
 INCLUDE_DIR=./include
-DATA_DIR=data
+DATA_DIR=data/out
 SOURCES := $(shell find $(SRC_DIR) -name '*.cu')
 
 imageNum=0
