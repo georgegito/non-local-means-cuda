@@ -10,6 +10,9 @@
 #include <sstream>
 #include <chrono>
 
+
+extern __shared__ float s[];
+
 namespace util {
 
 /* -------------------------------------------------------------------------- */
@@ -52,8 +55,7 @@ __host__ __device__ bool isInBounds(int n, int x, int y)
 
 __host__ __device__ float computeWeight(float dist, float sigma) // compute weight without "/z(i)" division
 {
-    // return exp(-dist / pow(sigma, 2));
-    return exp(-dist / (sigma * sigma));
+    return expf(-dist / (sigma * sigma));
 }
 
 // patch-to-patch euclidean distance
@@ -133,17 +135,16 @@ std::vector<float> computeResidual(std::vector<float> image, std::vector<float> 
 /* -------------------------------------------------------------------------- */
 
 __device__ float checkOverlay(  float *image, 
-                                float *patches, 
                                 int n,
                                 int patchSize, 
                                 int patchesRowStart, 
                                 int row, 
                                 int col  )
 {
-    for (int i = 0; i < patchSize; i++) {
-        if (row == patchesRowStart + i) {
-            return patches[i * n + col];
-        }
+    float *patches = s;
+
+    if (row < patchesRowStart + patchSize && row > patchesRowStart){
+        return patches[(row - patchesRowStart) * n + col];
     }
 
     return image[row * n + col];
@@ -151,15 +152,16 @@ __device__ float checkOverlay(  float *image,
 
 // patch-to-patch euclidean distance
 __device__ float cudaComputePatchDistance(  float * image, 
-                                            float * _weights, 
                                             int n, 
                                             int patchSize, 
                                             int p1_rowStart, 
                                             int p1_colStart, 
-                                            float *patches,
                                             int p2_rowStart, 
                                             int p2_colStart ) 
 {
+    float *patches = s;
+    float *_weights = (float*)&s[n * patchSize];
+
     float ans = 0;
     float temp;
 
@@ -167,12 +169,11 @@ __device__ float cudaComputePatchDistance(  float * image,
         for (int j = 0; j < patchSize; j++) {
             if (isInBounds(n, p1_rowStart + i, p1_colStart + j) && isInBounds(n, p2_rowStart + i, p2_colStart + j)) {
                 temp =  (patches[i * n + p1_colStart + j] - 
-                        checkOverlay(image, patches, n, patchSize, p1_rowStart, p2_rowStart + i, p2_colStart + j));
+                        checkOverlay(image, n, patchSize, p1_rowStart, p2_rowStart + i, p2_colStart + j));
                 ans += _weights[i * patchSize + j] * temp * temp;
             }
         }
     }
-
     return ans;
 }
 
