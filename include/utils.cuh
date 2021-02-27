@@ -163,15 +163,14 @@ __device__ float cudaComputePatchDistance(  float * image,
     float *_weights = (float*)&s[n * patchSize];
 
     float ans = 0;
+    float temp;
 
     for (int i = 0; i < patchSize; i++) {
         for (int j = 0; j < patchSize; j++) {
             if (isInBounds(n, p1_rowStart + i, p1_colStart + j) && isInBounds(n, p2_rowStart + i, p2_colStart + j)) {
-                ans += _weights[i * patchSize + j] * 
-                        (patches[i * n + p1_colStart + j] - 
-                            checkOverlay(image, n, patchSize, p1_rowStart, p2_rowStart + i, p2_colStart + j))*
-                            (patches[i * n + p1_colStart + j] - 
-                                checkOverlay(image, n, patchSize, p1_rowStart, p2_rowStart + i, p2_colStart + j));
+                temp =  (patches[i * n + p1_colStart + j] - 
+                        checkOverlay(image, n, patchSize, p1_rowStart, p2_rowStart + i, p2_colStart + j));
+                ans += _weights[i * patchSize + j] * temp * temp;
             }
         }
     }
