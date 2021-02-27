@@ -6,7 +6,7 @@
 namespace gpuSharedMem {
 
 __global__ void filterPixel(float * image, 
-                            float * _weights, 
+                            float * temp_weights, 
                             int n, 
                             int patchSize, 
                             float sigma,
@@ -21,7 +21,13 @@ __global__ void filterPixel(float * image,
     int pixelRow = blockIdx.x;
     int pixelCol = threadIdx.x;
 
-    extern __shared__ float patches[];
+    extern __shared__ float s[];
+    float *patches = s;
+    float *_weights = (float*)&patches[n * patchSize];
+
+    if(pixelCol < patchSize * patchSize){
+        _weights[pixelCol] = temp_weights[pixelCol];
+    }
 
     for (int i =0; i < patchSize; i++){
         if( i + pixelRow - patchSize / 2 >= 0 && i + pixelRow - patchSize / 2 < n){
@@ -57,7 +63,8 @@ __global__ void filterPixel(float * image,
     res = res / sumW;
 
     filteredImage[index] = res;
-    }
+
+}
 
 std::vector<float> filterImage( float * image, 
                                     int n, 
@@ -70,7 +77,7 @@ std::vector<float> filterImage( float * image,
 
     int size_image = n * n * sizeof(float);
     int size_weights = patchSize * patchSize * sizeof(float );
-    int size_shared_memory = n * patchSize * sizeof(float);
+    int size_shared_memory = (n * patchSize +  patchSize * patchSize) * sizeof(float);
 
     float *d_image, *d_weights, *d_res;
 
