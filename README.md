@@ -2,9 +2,9 @@
 
 Implementation of **Non Local Means** algorithm for image denoising.
 
-* **version 1**: CPU sequential using C++
-* **version 2**: GPU parallel using CUDA
-* **version 3**: GPU parallel using shared memory using CUDA
+* **version 1**: CPU sequential in C++
+* **version 2**: GPU parallel in CUDA
+* **version 3**: GPU parallel using shared memory in CUDA
 
 ## Build instructions
 
