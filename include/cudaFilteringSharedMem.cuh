@@ -3,6 +3,8 @@
 
 #include <utils.cuh>
 
+extern __shared__ float s[];
+
 namespace gpuSharedMem {
 
 __global__ void filterPixel(float * image, 
@@ -14,17 +16,17 @@ __global__ void filterPixel(float * image,
 {
     int index = threadIdx.x + blockIdx.x * blockDim.x;
     
-    if (index >= n*n){
+    if (index >= n * n) {
         return;
     }
 
     int pixelRow = blockIdx.x;
     int pixelCol = threadIdx.x;
 
-    extern __shared__ float patches[];
+    float *patches = s;
 
     for (int i =0; i < patchSize; i++){
-        if( i + pixelRow - patchSize / 2 >= 0 && i + pixelRow - patchSize / 2 < n){
+        if( i + pixelRow - patchSize / 2 >= 0 && i + pixelRow - patchSize / 2 < n) {
             patches[pixelCol + i * n] = image[pixelCol + (i + pixelRow - patchSize / 2) * n];
         }         
     }
@@ -40,13 +42,12 @@ __global__ void filterPixel(float * image,
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            dist = util::cudaComputePatchDistance(  image,  
+            dist = util::cudaComputePatchDistance(  image, 
                                                     _weights, 
                                                     n, 
                                                     patchSize, 
                                                     patchRowStart, 
                                                     patchColStart, 
-                                                    patches,
                                                     i - patchSize / 2, 
                                                     j - patchSize / 2  );
             w = util::computeWeight(dist, sigma);
@@ -57,13 +58,13 @@ __global__ void filterPixel(float * image,
     res = res / sumW;
 
     filteredImage[index] = res;
-    }
+}
 
-std::vector<float> filterImage( float * image, 
-                                    int n, 
-                                    int patchSize,  
-                                    float patchSigma,
-                                    float filterSigma )
+__host__ std::vector<float> filterImage(float * image, 
+                                        int n, 
+                                        int patchSize,  
+                                        float patchSigma,
+                                        float filterSigma)
 {
     std::vector<float> res(n * n);
     float * _weights = util::computeInsideWeights(patchSize, patchSigma);
@@ -81,8 +82,8 @@ std::vector<float> filterImage( float * image,
     cudaMemcpy(d_image, image, size_image, cudaMemcpyHostToDevice);
     cudaMemcpy(d_weights, _weights, size_weights, cudaMemcpyHostToDevice);
 
-    filterPixel<<<n,n, size_shared_memory>>>(d_image, d_weights, n, patchSize, filterSigma, d_res);
-    
+    filterPixel<<<n ,n , size_shared_memory>>>(d_image, d_weights, n, patchSize, filterSigma, d_res);
+
     cudaMemcpy(res.data(), d_res, size_image, cudaMemcpyDeviceToHost);
 
     cudaFree(d_image); 

@@ -6,15 +6,15 @@
 namespace gpuGlobalMem {
 
 __global__ void filterPixel(float * image, 
-                                float * _weights, 
-                                int n, 
-                                int patchSize, 
-                                float sigma,
-                                float *filteredImage)
+                            float * _weights, 
+                            int n, 
+                            int patchSize, 
+                            float sigma,
+                            float *filteredImage)
 {
     int index = threadIdx.x + blockIdx.x * blockDim.x;
     
-    if (index >= n*n){
+    if (index >= n * n) {
         return;
     }
 
@@ -27,6 +27,8 @@ __global__ void filterPixel(float * image,
     float w;
     int patchRowStart = pixelRow - patchSize / 2;
     int patchColStart = pixelCol - patchSize / 2;
+
+    __syncthreads();
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
@@ -69,7 +71,7 @@ std::vector<float> filterImage( float * image,
     cudaMemcpy(d_image, image, size_image, cudaMemcpyHostToDevice);
     cudaMemcpy(d_weights, _weights, size_weights, cudaMemcpyHostToDevice);
 
-    filterPixel<<<n,n>>>(d_image, d_weights, n, patchSize, filterSigma, d_res);
+    filterPixel<<<n, n>>>(d_image, d_weights, n, patchSize, filterSigma, d_res);
     
     cudaMemcpy(res.data(), d_res, size_image, cudaMemcpyDeviceToHost);
 
@@ -81,7 +83,5 @@ std::vector<float> filterImage( float * image,
 }
 
 } // namespace gpuGlobalMem
-
-
 
 #endif // __CUDAFILTERINGGLOBALMEM_CUH__

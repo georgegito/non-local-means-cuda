@@ -41,10 +41,10 @@ float filterPixel( float * image,
 }
 
 std::vector<float> filterImage( float * image, 
-                                 int n, 
-                                 int patchSize,  
-                                 float patchSigma,
-                                 float filterSigma )
+                                int n, 
+                                int patchSize,  
+                                float patchSigma,
+                                float filterSigma )
 {
     std::vector<float> res(n * n);
     float * _weights = util::computeInsideWeights(patchSize, patchSigma);

@@ -1,0 +1,79 @@
+Sun Feb 28 00:40:34 2021       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 418.39       Driver Version: 418.39       CUDA Version: 10.1     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|===============================+======================+======================|
+|   0  Tesla P100-PCIE...  Off  | 00000000:04:00.0 Off |                    0 |
+| N/A   28C    P0    24W / 250W |      0MiB / 12198MiB |      0%      Default |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                       GPU Memory |
+|  GPU       PID   Type   Process name                             Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+
+Image: Flower
+
+Image read
+
+CPU filtering time: 18470.7ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 0.8
+-Filter Sigma 0.04
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+CPU filtering time: 18996.5ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 0.8
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+CPU filtering time: 19226.7ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 0.8
+-Filter Sigma 0.08
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+slurmstepd: error: *** JOB 919644 ON cn21 CANCELLED AT 2021-02-28T00:41:43 DUE TO TIME LIMIT ***

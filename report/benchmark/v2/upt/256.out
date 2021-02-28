@@ -1,0 +1,530 @@
+Sun Feb 28 14:51:51 2021       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 418.39       Driver Version: 418.39       CUDA Version: 10.1     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|===============================+======================+======================|
+|   0  Tesla P100-PCIE...  Off  | 00000000:04:00.0 Off |                    0 |
+| N/A   28C    P0    26W / 250W |      0MiB / 12198MiB |      1%      Default |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                       GPU Memory |
+|  GPU       PID   Type   Process name                             Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 1658.19ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 0.02
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 1592.99ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 0.8
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 1607.95ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 1.4
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 1604.08ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 0.02
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 1613.48ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 0.8
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 1607.26ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 1.4
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 1602.58ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 0.02
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 1615.06ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 0.8
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 1600.22ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 1.4
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 2140.1ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 0.02
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 2078.53ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 0.8
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 2167.95ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 1.4
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 2086.48ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 0.02
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 2088.43ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 0.8
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 2078.18ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 1.4
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 2076.89ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 0.02
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 2094.97ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 0.8
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 2079.91ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 1.4
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 2851.98ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 0.02
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 2868.05ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 0.8
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 2875.45ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 1.4
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 2878.65ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 0.02
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 2882.39ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 0.8
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 2860.02ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 1.4
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 2850.05ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 0.02
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 2866.83ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 0.8
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 2860.77ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 1.4
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+

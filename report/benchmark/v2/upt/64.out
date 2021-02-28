@@ -1,0 +1,530 @@
+Sun Feb 28 14:50:22 2021       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 418.39       Driver Version: 418.39       CUDA Version: 10.1     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|===============================+======================+======================|
+|   0  Tesla P100-PCIE...  Off  | 00000000:04:00.0 Off |                    0 |
+| N/A   28C    P0    24W / 250W |      0MiB / 12198MiB |      0%      Default |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                       GPU Memory |
+|  GPU       PID   Type   Process name                             Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 661.576ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 0.02
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 755.892ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 0.8
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 662.277ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 1.4
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 666.895ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 0.02
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 680.852ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 0.8
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 654.747ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 1.4
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 687.693ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 0.02
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 630.705ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 0.8
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 754.753ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 1.4
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 689.232ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 0.02
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 691.317ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 0.8
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 691.879ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 1.4
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 727.228ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 0.02
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 675.52ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 0.8
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 789.389ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 1.4
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 710.018ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 0.02
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 714.987ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 0.8
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 683.953ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 1.4
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 785.328ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 0.02
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 758.952ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 0.8
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 785.863ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 1.4
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 767.639ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 0.02
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 870.94ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 0.8
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 827.438ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 1.4
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 793.209ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 0.02
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 779.234ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 0.8
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (global memory) time: 774.889ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 1.4
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+

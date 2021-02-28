@@ -1,18 +1,20 @@
 clc; clear;
 
-I = imread('../data/images/house.jpg');
+I = imread('../data/images/flower.jpg');
 J = imnoise (I, 'gaussian');
 figure();
-imshow(I);
+imagesc(I);
+title('original image'); colormap gray;
 figure();
-imshow(J);
+imagesc(J);
+title('noisy image'); colormap gray;
 
 normJ = mat2gray(J)
 
 figure();
-imshow(normJ);
+% imagesc(normJ);
 
-save('lena.mat', 'normJ');
-data=load('lena.mat');
+save('flower.mat', 'normJ');
+data=load('flower.mat');
 field=fieldnames(data);
-dlmwrite('lena.txt', data.(field{1}));
+dlmwrite('flower.txt', data.(field{1}));

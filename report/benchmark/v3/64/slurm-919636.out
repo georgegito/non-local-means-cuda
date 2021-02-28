@@ -1,0 +1,93 @@
+Sun Feb 28 00:39:20 2021       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 418.39       Driver Version: 418.39       CUDA Version: 10.1     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|===============================+======================+======================|
+|   0  Tesla P100-PCIE...  Off  | 00000000:04:00.0 Off |                    0 |
+| N/A   28C    P0    24W / 250W |      0MiB / 12198MiB |      0%      Default |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                       GPU Memory |
+|  GPU       PID   Type   Process name                             Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+
+Image: House
+
+Image read
+
+GPU filtering (shared memory) time: 749.632ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 0.8
+-Filter Sigma 0.04
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (shared memory) time: 761.288ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 0.8
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (shared memory) time: 761.55ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 0.8
+-Filter Sigma 0.08
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: House
+
+Image read
+
+GPU filtering (shared memory) time: 745.173ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 0.8
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
