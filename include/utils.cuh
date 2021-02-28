@@ -134,6 +134,7 @@ std::vector<float> computeResidual(std::vector<float> image, std::vector<float> 
 
 // patch-to-patch euclidean distance
 __device__ float cudaComputePatchDistance(  float * image, 
+                                            float * _weights,
                                             int n, 
                                             int patchSize, 
                                             int p1_rowStart, 
@@ -142,7 +143,6 @@ __device__ float cudaComputePatchDistance(  float * image,
                                             int p2_colStart ) 
 {
     float *patches = s;
-    float *_weights = (float*)&s[n * patchSize];
 
     float ans = 0;
     float temp;

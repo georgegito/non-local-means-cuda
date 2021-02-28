@@ -8,7 +8,7 @@ extern __shared__ float s[];
 namespace gpuSharedMem {
 
 __global__ void filterPixel(float * image, 
-                            float * temp_weights, 
+                            float * _weights, 
                             int n, 
                             int patchSize, 
                             float sigma,
@@ -24,11 +24,6 @@ __global__ void filterPixel(float * image,
     int pixelCol = threadIdx.x;
 
     float *patches = s;
-    float *_weights = (float*)&s[n * patchSize];
-
-    if(pixelCol < patchSize * patchSize){
-        _weights[pixelCol] = temp_weights[pixelCol];
-    }
 
     for (int i =0; i < patchSize; i++){
         if( i + pixelRow - patchSize / 2 >= 0 && i + pixelRow - patchSize / 2 < n){
@@ -47,7 +42,8 @@ __global__ void filterPixel(float * image,
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            dist = util::cudaComputePatchDistance(  image,  
+            dist = util::cudaComputePatchDistance(  image, 
+                                                    _weights, 
                                                     n, 
                                                     patchSize, 
                                                     patchRowStart, 
@@ -76,7 +72,7 @@ __host__ std::vector<float> filterImage(    float * image,
 
     int size_image = n * n * sizeof(float);
     int size_weights = patchSize * patchSize * sizeof(float );
-    int size_shared_memory = (n * patchSize +  patchSize * patchSize) * sizeof(float);
+    int size_shared_memory = n * patchSize * sizeof(float);
 
     float *d_image, *d_weights, *d_res;
 
