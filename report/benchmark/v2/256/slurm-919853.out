@@ -1,0 +1,55 @@
+Sun Feb 28 01:12:52 2021       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 418.39       Driver Version: 418.39       CUDA Version: 10.1     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|===============================+======================+======================|
+|   0  Tesla P100-PCIE...  Off  | 00000000:04:00.0 Off |                    0 |
+| N/A   29C    P0    25W / 250W |      0MiB / 12198MiB |      1%      Default |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                       GPU Memory |
+|  GPU       PID   Type   Process name                             Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 2857.39ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 0.8
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Lena
+
+Image read
+
+GPU filtering (global memory) time: 2860.63ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 0.8
+-Filter Sigma 0.08
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
