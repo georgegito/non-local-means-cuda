@@ -1,0 +1,530 @@
+Sun Feb 28 14:50:54 2021       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 418.39       Driver Version: 418.39       CUDA Version: 10.1     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|===============================+======================+======================|
+|   0  Tesla P100-PCIE...  Off  | 00000000:04:00.0 Off |                    0 |
+| N/A   28C    P0    24W / 250W |      0MiB / 12198MiB |      0%      Default |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                       GPU Memory |
+|  GPU       PID   Type   Process name                             Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 858.199ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 0.02
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 924.103ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 0.8
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 869.794ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 1.4
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 968.367ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 0.02
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 852.009ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 0.8
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 922.093ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 1.4
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 865.851ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 0.02
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 890.557ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 0.8
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 873.251ms
+
+Image filtered: 
+-Patch size 3
+-Patch sigma 1.4
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 997.196ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 0.02
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 1019.61ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 0.8
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 985.276ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 1.4
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 997.893ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 0.02
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 983.32ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 0.8
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 991.28ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 1.4
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 1000.61ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 0.02
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 993.108ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 0.8
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 1123.75ms
+
+Image filtered: 
+-Patch size 5
+-Patch sigma 1.4
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 1119.82ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 0.02
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 1110.25ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 0.8
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 1147.62ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 1.4
+-Filter Sigma 0.02
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 1110.08ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 0.02
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 1153.07ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 0.8
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 1120.84ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 1.4
+-Filter Sigma 0.06
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 1115.14ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 0.02
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 1111.88ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 0.8
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
+
+Image: Flower
+
+Image read
+
+GPU filtering (global memory) time: 1114.78ms
+
+Image filtered: 
+-Patch size 7
+-Patch sigma 1.4
+-Filter Sigma 0.1
+
+Residual calculated
+
+Filtered image written
+
+Residual written
+
+
