@@ -10,7 +10,6 @@
 #include <sstream>
 #include <chrono>
 
-
 extern __shared__ float s[];
 
 namespace util {
@@ -97,17 +96,15 @@ float * computeInsideWeights(int patchSize, float patchSigma)
 
     for (int i = 0; i < patchSize; i++) {
         for (int j = 0; j < patchSize; j++) {
-            // _dist = pow(centralPixelRow - i, 2) + pow(centralPixelCol - j, 2);
             _dist = (centralPixelRow - i) * (centralPixelRow - i) +
                     (centralPixelCol - j) * (centralPixelCol - j);
-            // _weights[i * patchSize + j] = exp(-_dist / (2 * pow(patchSigma, 2)));
             _weights[i * patchSize + j] = exp(-_dist / (2 * (patchSigma * patchSigma)));
             _sumW += _weights[i * patchSize + j];
         }
     }
 
     for (int i = 0; i < patchSize; i++) {
-        for (int j = 0; j < patchSize;j++) {
+        for (int j = 0; j < patchSize; j++) {
             _weights[i * patchSize + j] = _weights[i * patchSize + j] / _sumW;
         }
     }
@@ -140,7 +137,7 @@ __device__ float cudaComputePatchDistance(  float * image,
                                             int p1_rowStart, 
                                             int p1_colStart, 
                                             int p2_rowStart, 
-                                            int p2_colStart ) 
+                                            int p2_colStart  ) 
 {
     float *patches = s;
 
@@ -149,13 +146,14 @@ __device__ float cudaComputePatchDistance(  float * image,
 
     for (int i = 0; i < patchSize; i++) {
         for (int j = 0; j < patchSize; j++) {
-            if (isInBounds(n, p1_rowStart + i, p1_colStart + j) && isInBounds(n, p2_rowStart + i, p2_colStart + j)) {
+            if ( isInBounds(n, p1_rowStart + i, p1_colStart + j) && isInBounds(n, p2_rowStart + i, p2_colStart + j) ) {
                 temp =  patches[i * n + p1_colStart + j] - 
                             image[(p2_rowStart + i) * n + p2_colStart + j];
                 ans += _weights[i * patchSize + j] * temp * temp;
             }
         }
     }
+
     return ans;
 }
 
@@ -235,14 +233,14 @@ std::string write(std::vector<float> image, std::string fileName, int rowNum, in
     return "./data/out/" + fileName + ".txt";
 }
 
-std::string write_images(  std::vector<float> filteredImage, 
-                    std::vector<float > residual, 
-                    int patchSize, 
-                    float filterSigma, 
-                    float patchSigma, 
-                    int rowNum, 
-                    int colNum, 
-                    bool useGpu  )
+std::string write_images(   std::vector<float> filteredImage, 
+                            std::vector<float > residual, 
+                            int patchSize, 
+                            float filterSigma, 
+                            float patchSigma, 
+                            int rowNum, 
+                            int colNum, 
+                            bool useGpu   )
 {
     std::string ret;
     std::string params = std::to_string(patchSize)   + "_" + 
@@ -270,18 +268,6 @@ std::string write_images(  std::vector<float> filteredImage,
 } // namespace file
 
 namespace test {
-
-bool mat(std::vector<float> mat_1, std::vector<float> mat_2, int n)
-{
-    for (int i = 0; i< n; i++) {
-        for (int j=0; j < n; j++) {
-            if (mat_1[i * n + j] != mat_2[i * n + j]) {
-                return false;
-            }
-        }
-    }
-    return true;
-}
 
 void out(std::string standOutPath, std::string outPath, int n)
 {

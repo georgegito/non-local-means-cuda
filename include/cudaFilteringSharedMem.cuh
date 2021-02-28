@@ -16,7 +16,7 @@ __global__ void filterPixel(float * image,
 {
     int index = threadIdx.x + blockIdx.x * blockDim.x;
     
-    if (index >= n*n){
+    if (index >= n * n) {
         return;
     }
 
@@ -26,7 +26,7 @@ __global__ void filterPixel(float * image,
     float *patches = s;
 
     for (int i =0; i < patchSize; i++){
-        if( i + pixelRow - patchSize / 2 >= 0 && i + pixelRow - patchSize / 2 < n){
+        if( i + pixelRow - patchSize / 2 >= 0 && i + pixelRow - patchSize / 2 < n) {
             patches[pixelCol + i * n] = image[pixelCol + (i + pixelRow - patchSize / 2) * n];
         }         
     }
@@ -58,14 +58,13 @@ __global__ void filterPixel(float * image,
     res = res / sumW;
 
     filteredImage[index] = res;
-
 }
 
-__host__ std::vector<float> filterImage(    float * image, 
-                                            int n, 
-                                            int patchSize,  
-                                            float patchSigma,
-                                            float filterSigma )
+__host__ std::vector<float> filterImage(float * image, 
+                                        int n, 
+                                        int patchSize,  
+                                        float patchSigma,
+                                        float filterSigma)
 {
     std::vector<float> res(n * n);
     float * _weights = util::computeInsideWeights(patchSize, patchSigma);
