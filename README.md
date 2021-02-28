@@ -1,1 +1,34 @@
-# non-local-means-cuda
+# Non Local Means - CUDA
+
+Implementation of **Non Local Means** algorithm for image denoising.
+
+* **version 1**: CPU sequential using C++
+* **version 2**: GPU parallel using CUDA
+* **version 3**: GPU parallel using shared memory using CUDA
+
+## Build instructions
+
+**Requierements:** nvcc (Nvidia CUDA Compiler)
+
+Set parameters in Makefile and
+```bash
+make
+```
+or 
+
+```bash
+mkdir -p data/out
+nvcc -o build/main -I./include src/main.cu -O3
+```
+
+and run with
+
+```bash
+./build/main $(imageNum) $(patchSize) $(filterSigma) $(patchSigma) $(useGpu) $(useSharedMem)
+```
+
+## Instructions to see the filtered images
+
+Run the script `matlab/show_image.m` in matlab and all the files of folder `data/out` will show up.
+
+Original and noisy images can be found in `data/images`.
